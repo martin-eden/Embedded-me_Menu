@@ -22,6 +22,14 @@ Run [Install.sh](Install.sh).
 Run [Remove.sh](Remove.sh).
 
 
+# Compile
+
+Zero-warnings compilation:
+
+```bash
+arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-property compiler.cpp.extra_flags="-std=c++1z"
+```
+
 # Code
 
 * [Example](examples/me_Menu/me_Menu.ino)
