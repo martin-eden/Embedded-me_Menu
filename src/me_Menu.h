@@ -7,50 +7,29 @@
 
 #pragma once
 
-#include <me_BaseTypes.h>
-#include <me_MemorySegment.h>
+#include "MenuItem/Interface.h"
 
-namespace me_MenuItem
+#include <me_List.h>
+
+#include <me_BaseTypes.h>
+
+namespace me_Menu
 {
   using
-    me_MemorySegment::TMemorySegment,
-    me_BaseTypes::TBool;
+    me_List::TQueue,
+    me_List::TStack,
+    me_BaseTypes::TBool,
+    me_MenuItem::TMenuItem;
 
-  /*
-    Menu item.
-
-    Two strings: command and description.
-
-    It _owns_ memory for these strings, so data is cloned by setters.
-    It releases memory upon death of course.
-  */
-  struct TMenuItem
+  struct TMenu
   {
-    TMemorySegment Command;
-    TMemorySegment Description;
+    TStack List;
 
-    // Sets fields to data copy of segments
-    TMenuItem(
-      TMemorySegment OuterCommand,
-      TMemorySegment OuterDescription
-    );
-    // Release memory upon death
-    ~TMenuItem();
+    TBool AddItem(TMenuItem * MenuItem);
 
-    // Set .Command to memory copy of argument
-    TBool SetCommand(TMemorySegment OuterCommand);
-    // Set .Description to memory copy of argument
-    TBool SetDescription(TMemorySegment OuterDescription);
-
-    // Print data (production)
     void Print();
-    // Print state (test/debug)
     void PrintWrappings();
+    void GetSelection();
   };
 }
 
-/*
-  2024-05-25
-  2024-05-29
-  2024-05-30 Owning memory for command and description
-*/

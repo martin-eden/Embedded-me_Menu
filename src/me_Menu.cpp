@@ -1,4 +1,4 @@
-// [WIP] Menu navigation
+// Text menu navigation via Serial
 
 /*
   Author: Martin Eden
@@ -9,75 +9,69 @@
 
 #include <stdio.h> // printf()
 
+#include <me_List.h>
+#include <me_MemorySegment.h> // (Reserve/Release)Chunk()
 #include <me_BaseTypes.h>
 
 using
-  me_MenuItem::TMenuItem,
+  me_Menu::TMenu,
+  me_MemorySegment::TMemorySegment,
   me_BaseTypes::TBool;
 
-// Set fields to data copy of segments
-TMenuItem::TMenuItem(
-  TMemorySegment OuterCommand,
-  TMemorySegment OuterDescription
-)
+/*
+  Add menu item to menu
+
+  We allocate memory for TMenuItem and TNode (list).
+  Menu item data memory is allocated internally in CloneFrom().
+
+  Memory allocations is done via TMemorySegment.ReserveChunk().
+  I found it is more sane way than via malloc() or "new".
+*/
+TBool TMenu::AddItem(TMenuItem * OuterMenuItem)
 {
-  Command = { { 0 }, .Size = 0 };
-  SetCommand(OuterCommand);
+  printf("> AddItem()\n");
+  OuterMenuItem->PrintWrappings();
 
-  Description = { { 0 }, .Size = 0 };
-  SetDescription(OuterDescription);
-}
+  TMemorySegment MenuItemSeg;
+  MenuItemSeg.Size = sizeof(TMenuItem);
+  MenuItemSeg.ReserveChunk();
 
-// Release memory upon death
-TMenuItem::~TMenuItem()
-{
-  Command.ReleaseChunk();
-  Description.ReleaseChunk();
-}
+  TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
+  MenuItem->CloneFrom(OuterMenuItem);
+  MenuItem->PrintWrappings();
 
-// Set .Command to memory copy of argument
-TBool TMenuItem::SetCommand(TMemorySegment OuterCommand)
-{
-  return Command.CloneFrom(OuterCommand);
-}
+  using me_List::TNode;
 
-// Set .Description to memory copy of argument
-TBool TMenuItem::SetDescription(TMemorySegment OuterDescription)
-{
-  return Description.CloneFrom(OuterDescription);
-}
+  TMemorySegment NodeSeg;
+  NodeSeg.Size = sizeof(TNode);
+  NodeSeg.ReserveChunk();
 
-// Represent data
-void TMenuItem::Print()
-{
-  Command.Print();
-  printf(" - ");
-  Description.Print();
-  printf("\n");
-}
+  TNode * ListNodePtr = (TNode *) NodeSeg.Start.Addr;
 
-// Represent state
-void TMenuItem::PrintWrappings()
-{
-  using me_BaseTypes::TUint_2;
+  ListNodePtr->DataPtr = MenuItemSeg.Start.Addr;
 
-  printf("[0x%04X]", (TUint_2) this);
+  List.Add(ListNodePtr);
+  ListNodePtr->PrintWrappings();
 
-  printf("(\n");
-
-  printf("  Command ");
-  Command.PrintWrappings();
   printf("\n");
 
-  printf("  Description ");
-  Description.PrintWrappings();
-  printf("\n");
+  printf("< AddItem()\n");
 
-  printf(")\n");
+  return true;
+}
+
+void TMenu::Print()
+{
+}
+
+void TMenu::PrintWrappings()
+{
+}
+
+void TMenu::GetSelection()
+{
 }
 
 /*
-  2024-05-25
-  2024-05-29
   2024-05-30
 */

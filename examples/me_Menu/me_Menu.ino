@@ -9,6 +9,7 @@
 
 #include <me_InstallStandardStreams.h>
 #include <me_UartSpeeds.h>
+#include <me_BaseTypes.h>
 
 // Forwards:
 void TestMenu();
@@ -31,18 +32,36 @@ void loop()
 void TestMenu()
 {
   using
-    me_MenuItem::TMenuItem,
-    me_MemorySegment::FromAsciiz;
+    me_Menu::TMenu,
+    me_Menu::TMenuItem,
+    me_MemorySegment::FromAsciiz,
+    me_BaseTypes::TUint_2;
 
-  // "Get data" command
-  TMenuItem Get_Cmd =
+  TMenu Menu;
+
+  TMenuItem Command;
+
+  /*
+    DON'T do so.
+
+    TMenuItem assumes it owns fields memory and will try to free
+    that FromAsciiz() casts.
+
+  Command =
     {
-      .Command = FromAsciiz("G"),
-      .Description = FromAsciiz("Get data in range"),
+      .Command = FromAsciiz("Put"),
+      .Description = FromAsciiz("Put data in range"),
     };
+  */
+  Command.SetCommand(FromAsciiz("Put"));
+  Command.SetDescription(FromAsciiz("Put data in range"));
 
-  Get_Cmd.PrintWrappings();
-  Get_Cmd.Print();
+  Menu.AddItem(&Command);
+
+  Command.SetCommand(FromAsciiz("G"));
+  Command.SetDescription(FromAsciiz("Get data in range"));
+
+  Menu.AddItem(&Command);
 }
 
 /*
