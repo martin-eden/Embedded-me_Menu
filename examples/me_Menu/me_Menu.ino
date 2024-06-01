@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-05-30
+  Last mod.: 2024-06-01
 */
 
 #include <me_Menu.h>
@@ -44,24 +44,33 @@ void TestMenu()
   /*
     DON'T do so.
 
-    TMenuItem assumes it owns fields memory and will try to free
-    that FromAsciiz() casts.
+    TMenuItem owns fields memory and will try to free temporary
+    strings from FromAsciiz() casts.
 
-  Command =
-    {
-      .Command = FromAsciiz("Put"),
-      .Description = FromAsciiz("Put data in range"),
-    };
+    Command =
+      {
+        .Command = FromAsciiz("Put"),
+        .Description = FromAsciiz("Put data in range"),
+      };
   */
-  Command.SetCommand(FromAsciiz("Put"));
-  Command.SetDescription(FromAsciiz("Put data in range"));
 
+  Command.SetCommand(&FromAsciiz("Put"));
+  Command.SetDescription(&FromAsciiz("Put data in range"));
   Menu.AddItem(&Command);
 
-  Command.SetCommand(FromAsciiz("G"));
-  Command.SetDescription(FromAsciiz("Get data in range"));
-
+  Command.SetCommand(&FromAsciiz("Get"));
+  Command.SetDescription(&FromAsciiz("Get data in range"));
   Menu.AddItem(&Command);
+
+  Command.SetCommand(&FromAsciiz("SetRange"));
+  Command.SetDescription(&FromAsciiz("Set memory range"));
+  Menu.AddItem(&Command);
+
+  Command.SetCommand(&FromAsciiz("GetRange"));
+  Command.SetDescription(&FromAsciiz("Get memory range"));
+  Menu.AddItem(&Command);
+
+  Menu.Print();
 }
 
 /*

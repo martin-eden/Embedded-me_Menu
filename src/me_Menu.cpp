@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-05-30
+  Last mod.: 2024-06-01
 */
 
 #include "me_Menu.h"
@@ -16,7 +16,9 @@
 using
   me_Menu::TMenu,
   me_MemorySegment::TMemorySegment,
-  me_BaseTypes::TBool;
+  me_BaseTypes::TBool,
+  me_List::TNode,
+  me_List::Traverse;
 
 /*
   Add menu item to menu
@@ -29,39 +31,51 @@ using
 */
 TBool TMenu::AddItem(TMenuItem * OuterMenuItem)
 {
-  printf("> AddItem()\n");
-  OuterMenuItem->PrintWrappings();
-
   TMemorySegment MenuItemSeg;
+
   MenuItemSeg.Size = sizeof(TMenuItem);
   MenuItemSeg.ReserveChunk();
-
   TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
+
   MenuItem->CloneFrom(OuterMenuItem);
-  MenuItem->PrintWrappings();
 
   using me_List::TNode;
 
   TMemorySegment NodeSeg;
   NodeSeg.Size = sizeof(TNode);
   NodeSeg.ReserveChunk();
+  TNode * ListNode = (TNode *) NodeSeg.Start.Addr;
 
-  TNode * ListNodePtr = (TNode *) NodeSeg.Start.Addr;
+  ListNode->DataPtr = MenuItemSeg.Start.Addr;
 
-  ListNodePtr->DataPtr = MenuItemSeg.Start.Addr;
-
-  List.Add(ListNodePtr);
-  ListNodePtr->PrintWrappings();
-
-  printf("\n");
-
-  printf("< AddItem()\n");
+  List.Add(ListNode);
 
   return true;
 }
 
+/*
+  Print menu item
+*/
+TBool PrintListNode(TNode * ListNode)
+{
+  using
+    me_Menu::TMenuItem;
+
+  TMenuItem * MenuItem = (TMenuItem *) ListNode->DataPtr;
+
+  MenuItem->Print();
+
+  return true;
+}
+
+/*
+  Print menu
+*/
 void TMenu::Print()
 {
+  printf("--\n");
+  Traverse(List.HeadPtr, PrintListNode);
+  printf("==\n");
 }
 
 void TMenu::PrintWrappings()
@@ -74,4 +88,5 @@ void TMenu::GetSelection()
 
 /*
   2024-05-30
+  2024-06-01
 */

@@ -27,23 +27,23 @@ TMenuItem::~TMenuItem()
 }
 
 // Set <.Command> to memory copy of argument
-TBool TMenuItem::SetCommand(TMemorySegment OuterCommand)
+TBool TMenuItem::SetCommand(TMemorySegment * OuterCommand)
 {
-  return Command.CloneFrom(&OuterCommand);
+  return Command.CloneFrom(OuterCommand);
 }
 
 // Set <.Description> to memory copy of argument
-TBool TMenuItem::SetDescription(TMemorySegment OuterDescription)
+TBool TMenuItem::SetDescription(TMemorySegment * OuterDescription)
 {
-  return Description.CloneFrom(&OuterDescription);
+  return Description.CloneFrom(OuterDescription);
 }
 
 // Set fields to copies from <Src>
 TBool TMenuItem::CloneFrom(TMenuItem * Src)
 {
-  if (!SetCommand(Src->Command))
+  if (!SetCommand(&Src->Command))
     return false;
-  if (!SetDescription(Src->Description))
+  if (!SetDescription(&Src->Description))
     return false;
   return true;
 }
