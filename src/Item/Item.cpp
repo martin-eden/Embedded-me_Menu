@@ -5,7 +5,7 @@
   Last mod.: 2024-05-30
 */
 
-#include "MenuItem/Interface.h"
+#include "Item/Item.h"
 
 #include <stdio.h> // printf()
 
@@ -29,13 +29,13 @@ TMenuItem::~TMenuItem()
 // Set <.Command> to memory copy of argument
 TBool TMenuItem::SetCommand(TMemorySegment OuterCommand)
 {
-  return Command.CloneFrom(OuterCommand);
+  return Command.CloneFrom(&OuterCommand);
 }
 
 // Set <.Description> to memory copy of argument
 TBool TMenuItem::SetDescription(TMemorySegment OuterDescription)
 {
-  return Description.CloneFrom(OuterDescription);
+  return Description.CloneFrom(&OuterDescription);
 }
 
 // Set fields to copies from <Src>
