@@ -33,9 +33,9 @@ namespace me_MenuItem
     ~TMenuItem();
 
     // Set <.Command> to memory copy of argument
-    TBool SetCommand(TMemorySegment OuterCommand);
+    TBool SetCommand(TMemorySegment * OuterCommand);
     // Set <.Description> to memory copy of argument
-    TBool SetDescription(TMemorySegment OuterDescription);
+    TBool SetDescription(TMemorySegment * OuterDescription);
 
     // Set fields according to <Src>
     TBool CloneFrom(TMenuItem * Src);

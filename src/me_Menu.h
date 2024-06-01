@@ -23,7 +23,7 @@ namespace me_Menu
 
   struct TMenu
   {
-    TStack List;
+    TQueue List;
 
     TBool AddItem(TMenuItem * MenuItem);
 
