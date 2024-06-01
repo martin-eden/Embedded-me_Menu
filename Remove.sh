@@ -7,6 +7,7 @@ arduino-cli lib uninstall me_Menu
 arduino-cli lib uninstall \
   me_UartSpeeds \
   me_InstallStandardStreams \
+  me_List \
   me_MemorySegment \
   me_MemoryPoint \
   me_BaseTypes
