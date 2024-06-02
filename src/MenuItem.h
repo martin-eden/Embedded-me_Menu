@@ -14,7 +14,8 @@ namespace me_MenuItem
 {
   using
     me_MemorySegment::TMemorySegment,
-    me_BaseTypes::TBool;
+    me_BaseTypes::TBool,
+    me_BaseTypes::TChar;
 
   /*
     Menu item
@@ -32,13 +33,11 @@ namespace me_MenuItem
     // Release memory upon death
     ~TMenuItem();
 
-    // Set <.Command> to memory copy of argument
-    TBool SetCommand(TMemorySegment * OuterCommand);
-    // Set <.Description> to memory copy of argument
-    TBool SetDescription(TMemorySegment * OuterDescription);
-
     // Set fields according to <Src>
     TBool CloneFrom(TMenuItem * Src);
+
+    // Release memory of fields
+    void Release();
 
     // Print data (production)
     void Print();

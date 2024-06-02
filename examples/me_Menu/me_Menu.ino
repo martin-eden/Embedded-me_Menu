@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-01
+  Last mod.: 2024-06-02
 */
 
 #include <me_Menu.h>
@@ -40,13 +40,13 @@ void TestMenu()
 
   TMenu Menu;
 
-  TMenuItem Command;
+  TMenuItem MenuItem;
 
   /*
     DON'T do so.
 
-    TMenuItem owns fields memory and will try to free temporary
-    strings from FromAsciiz() casts.
+    TMenuItem owns fields memory and at destruction will try to free
+    temporary strings from FromAsciiz() casts.
 
     Command =
       {
@@ -55,27 +55,25 @@ void TestMenu()
       };
   */
 
+  MenuItem.Command.CloneFrom("Put");
+  MenuItem.Description.CloneFrom("Put data in range");
+  Menu.Add(&MenuItem);
 
-  TMemorySegment MemSeg;
-  MemSeg = FromAsciiz("Put");
-  Command.SetCommand(&MemSeg);
-  MemSeg = FromAsciiz("Put data in range");
-  Command.SetDescription(&MemSeg);
-  Menu.AddItem(&Command);
+  MenuItem.Command.CloneFrom("Get");
+  MenuItem.Description.CloneFrom("Get data in range");
+  Menu.Add(&MenuItem);
 
-  /*
-  Command.SetCommand(&FromAsciiz("Get"));
-  Command.SetDescription(&FromAsciiz("Get data in range"));
-  Menu.AddItem(&Command);
+  MenuItem.Command.CloneFrom("SetRange");
+  MenuItem.Description.CloneFrom("Set memory range");
+  Menu.Add(&MenuItem);
 
-  Command.SetCommand(&FromAsciiz("SetRange"));
-  Command.SetDescription(&FromAsciiz("Set memory range"));
-  Menu.AddItem(&Command);
+  MenuItem.Command.CloneFrom("GetRange");
+  MenuItem.Description.CloneFrom("Get memory range");
+  Menu.Add(&MenuItem);
 
-  Command.SetCommand(&FromAsciiz("GetRange"));
-  Command.SetDescription(&FromAsciiz("Get memory range"));
-  Menu.AddItem(&Command);
-  */
+  Menu.Print();
+
+  Menu.RemoveAll();
 
   Menu.Print();
 }
@@ -84,4 +82,6 @@ void TestMenu()
   2024-05-25
   2024-05-29
   2024-05-30
+  2024-06-01
+  2024-06-02
 */

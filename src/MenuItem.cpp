@@ -13,6 +13,8 @@
 
 using
   me_MenuItem::TMenuItem,
+  me_MemorySegment::TMemorySegment,
+  me_MemorySegment::FromAsciiz,
   me_BaseTypes::TUint_2,
   me_BaseTypes::TBool;
 
@@ -25,30 +27,26 @@ TMenuItem::~TMenuItem()
   printf("Destructor is here.\n");
   PrintWrappings();
 
-  Command.ReleaseChunk();
-  Description.ReleaseChunk();
-}
-
-// Set <.Command> to memory copy of argument
-TBool TMenuItem::SetCommand(TMemorySegment * OuterCommand)
-{
-  return Command.CloneFrom(OuterCommand);
-}
-
-// Set <.Description> to memory copy of argument
-TBool TMenuItem::SetDescription(TMemorySegment * OuterDescription)
-{
-  return Description.CloneFrom(OuterDescription);
+  Release();
 }
 
 // Set fields to copies from <Src>
 TBool TMenuItem::CloneFrom(TMenuItem * Src)
 {
-  if (!SetCommand(&Src->Command))
+  if (!Command.CloneFrom(&Src->Command))
     return false;
-  if (!SetDescription(&Src->Description))
+  if (!Description.CloneFrom(&Src->Description))
     return false;
   return true;
+}
+
+/*
+  Release memory of fields
+*/
+void TMenuItem::Release()
+{
+  Command.ReleaseChunk();
+  Description.ReleaseChunk();
 }
 
 // Represent data
