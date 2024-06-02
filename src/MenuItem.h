@@ -2,18 +2,18 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-05-30
+  Last mod.: 2024-06-02
 */
 
 #pragma once
 
-#include <me_MemorySegment.h>
+#include <me_ManagedMemory.h>
 #include <me_BaseTypes.h>
 
 namespace me_MenuItem
 {
   using
-    me_MemorySegment::TMemorySegment,
+    me_ManagedMemory::TManagedMemory,
     me_BaseTypes::TBool,
     me_BaseTypes::TChar;
 
@@ -27,8 +27,8 @@ namespace me_MenuItem
   */
   struct TMenuItem
   {
-    TMemorySegment Command;
-    TMemorySegment Description;
+    TManagedMemory Command;
+    TManagedMemory Description;
 
     // Release memory upon death
     ~TMenuItem();
