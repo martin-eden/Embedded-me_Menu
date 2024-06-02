@@ -13,19 +13,20 @@
 
 using
   me_MenuItem::TMenuItem,
-  me_MemorySegment::TMemorySegment,
-  me_MemorySegment::FromAsciiz,
+  me_ManagedMemory::TManagedMemory,
   me_BaseTypes::TUint_2,
   me_BaseTypes::TBool;
 
 // Release memory upon death
 TMenuItem::~TMenuItem()
 {
+  /*
   PrintTag();
 
   printf(" ");
   printf("Destructor is here.\n");
   PrintWrappings();
+  */
 
   Release();
 }
