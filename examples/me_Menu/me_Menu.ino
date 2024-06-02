@@ -7,12 +7,9 @@
 
 #include <me_Menu.h>
 
-#include <me_InstallStandardStreams.h>
 #include <me_UartSpeeds.h>
+#include <me_InstallStandardStreams.h>
 #include <me_BaseTypes.h>
-
-// Forwards:
-void TestMenu();
 
 void setup()
 {
@@ -33,10 +30,7 @@ void TestMenu()
 {
   using
     me_Menu::TMenu,
-    me_Menu::TMenuItem,
-    me_MemorySegment::FromAsciiz,
-    me_MemorySegment::TMemorySegment,
-    me_BaseTypes::TUint_2;
+    me_Menu::TMenuItem;
 
   TMenu Menu;
 
