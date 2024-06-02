@@ -28,7 +28,7 @@ using
   Memory allocations is done via TMemorySegment.ReserveChunk().
   I found it is more sane way than via malloc() or "new".
 */
-TBool TMenu::AddItem(TMenuItem * OuterMenuItem)
+TBool TMenu::Add(TMenuItem * OuterMenuItem)
 {
   TMemorySegment MenuItemSeg;
 
@@ -48,6 +48,30 @@ TBool TMenu::AddItem(TMenuItem * OuterMenuItem)
   List.Add(ListNode);
 
   return true;
+}
+
+/*
+  Release memory of menu item
+*/
+TBool KillMenuItem(TListNode * Node)
+{
+  using me_Menu::TMenuItem;
+
+  TMenuItem * Item = (TMenuItem *) Node->Data;
+
+  Item->Release();
+
+  return true;
+}
+
+/*
+  Remove all items from the list and release their memory
+*/
+void TMenu::RemoveAll()
+{
+  Traverse(List.Head, KillMenuItem);
+  KillList(List.Head);
+  List.Head = 0;
 }
 
 /*

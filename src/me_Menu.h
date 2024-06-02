@@ -25,9 +25,9 @@ namespace me_Menu
     TQueue List;
 
     // Add item
-    TBool AddItem(TMenuItem * MenuItem);
+    TBool Add(TMenuItem * MenuItem);
     // Remove all items
-    void RemoveItems();
+    void RemoveAll();
 
     // Debug print
     void PrintWrappings();
