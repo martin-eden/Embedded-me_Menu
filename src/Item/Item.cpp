@@ -19,7 +19,10 @@ using
 // Release memory upon death
 TMenuItem::~TMenuItem()
 {
-  printf("TMenuItem destructor here.\n");
+  PrintTag();
+
+  printf(" ");
+  printf("Destructor is here.\n");
   PrintWrappings();
 
   Command.ReleaseChunk();
@@ -57,13 +60,14 @@ void TMenuItem::Print()
   printf("\n");
 }
 
+void TMenuItem::PrintTag()
+{
+  printf("[TMenuItem 0x%04X]", (TUint_2) this);
+}
+
 // Represent state
 void TMenuItem::PrintWrappings()
 {
-  using me_BaseTypes::TUint_2;
-
-  printf("[TMenuItem 0x%04X]", (TUint_2) this);
-
   printf("(\n");
 
   printf("  Command ");
@@ -81,4 +85,5 @@ void TMenuItem::PrintWrappings()
   2024-05-25
   2024-05-29
   2024-05-30
+  2024-06-02
 */
