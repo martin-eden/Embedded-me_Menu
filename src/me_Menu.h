@@ -7,11 +7,10 @@
 
 #pragma once
 
-#include "Item/Item.h"
-
 #include <me_List.h>
-
 #include <me_BaseTypes.h>
+
+#include "MenuItem.h"
 
 namespace me_Menu
 {
