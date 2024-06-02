@@ -22,24 +22,40 @@ using
 /*
   Add menu item to menu
 
-  We allocate memory for TMenuItem and TNode (list).
+  We allocate memory for TMenuItem and TListNode.
   Menu item data memory is allocated internally in CloneFrom().
 
-  Memory allocations is done via TMemorySegment.ReserveChunk().
-  I found it is more sane way than via malloc() or "new".
+  Memory allocations is done via TMemorySegment.Reserve().
+  I found this way more sane and safe than via malloc() or "new".
 */
 TBool TMenu::Add(TMenuItem * OuterMenuItem)
 {
   TMemorySegment MenuItemSeg;
 
-  MenuItemSeg.Reserve(sizeof(TMenuItem));
+  if (!MenuItemSeg.Reserve(sizeof(TMenuItem)))
+  {
+    // No memory for new menu item structure
+    return false;
+  }
   TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
 
-  MenuItem->CloneFrom(OuterMenuItem);
+  if (!MenuItem->CloneFrom(OuterMenuItem))
+  {
+    // No memory to copy data (command and description)
+    MenuItemSeg.Release();
+    return false;
+  }
 
   TMemorySegment NodeSeg;
 
-  NodeSeg.Reserve(sizeof(TListNode));
+  if (!NodeSeg.Reserve(sizeof(TListNode)))
+  {
+    // No memory for new list node
+    MenuItem->Release();
+    MenuItemSeg.Release();
+    return false;
+  }
+
   TListNode * ListNode = (TListNode *) NodeSeg.Start.Addr;
 
   ListNode->Data = MenuItemSeg.Start.Addr;
