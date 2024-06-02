@@ -42,8 +42,11 @@ namespace me_MenuItem
 
     // Print data (production)
     void Print();
+
     // Print state (test/debug)
     void PrintWrappings();
+    // Print [0x7389 TMenuItem] (test/debug)
+    void PrintTag();
   };
 }
 

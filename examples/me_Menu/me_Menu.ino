@@ -35,6 +35,7 @@ void TestMenu()
     me_Menu::TMenu,
     me_Menu::TMenuItem,
     me_MemorySegment::FromAsciiz,
+    me_MemorySegment::TMemorySegment,
     me_BaseTypes::TUint_2;
 
   TMenu Menu;
@@ -54,10 +55,15 @@ void TestMenu()
       };
   */
 
-  Command.SetCommand(&FromAsciiz("Put"));
-  Command.SetDescription(&FromAsciiz("Put data in range"));
+
+  TMemorySegment MemSeg;
+  MemSeg = FromAsciiz("Put");
+  Command.SetCommand(&MemSeg);
+  MemSeg = FromAsciiz("Put data in range");
+  Command.SetDescription(&MemSeg);
   Menu.AddItem(&Command);
 
+  /*
   Command.SetCommand(&FromAsciiz("Get"));
   Command.SetDescription(&FromAsciiz("Get data in range"));
   Menu.AddItem(&Command);
@@ -69,6 +75,7 @@ void TestMenu()
   Command.SetCommand(&FromAsciiz("GetRange"));
   Command.SetDescription(&FromAsciiz("Get memory range"));
   Menu.AddItem(&Command);
+  */
 
   Menu.Print();
 }
