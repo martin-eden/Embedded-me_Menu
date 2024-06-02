@@ -42,19 +42,6 @@ void TestMenu()
 
   TMenuItem MenuItem;
 
-  /*
-    DON'T do so.
-
-    TMenuItem owns fields memory and at destruction will try to free
-    temporary strings from FromAsciiz() casts.
-
-    Command =
-      {
-        .Command = FromAsciiz("Put"),
-        .Description = FromAsciiz("Put data in range"),
-      };
-  */
-
   MenuItem.Command.CloneFrom("Put");
   MenuItem.Description.CloneFrom("Put data in range");
   Menu.Add(&MenuItem);
@@ -74,8 +61,6 @@ void TestMenu()
   Menu.Print();
 
   Menu.RemoveAll();
-
-  Menu.Print();
 }
 
 /*
