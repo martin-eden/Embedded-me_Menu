@@ -32,15 +32,14 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 {
   TMemorySegment MenuItemSeg;
 
-  MenuItemSeg.Size = sizeof(TMenuItem);
-  MenuItemSeg.ReserveChunk();
+  MenuItemSeg.Reserve(sizeof(TMenuItem));
   TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
 
   MenuItem->CloneFrom(OuterMenuItem);
 
   TMemorySegment NodeSeg;
-  NodeSeg.Size = sizeof(TListNode);
-  NodeSeg.ReserveChunk();
+
+  NodeSeg.Reserve(sizeof(TListNode));
   TListNode * ListNode = (TListNode *) NodeSeg.Start.Addr;
 
   ListNode->Data = MenuItemSeg.Start.Addr;

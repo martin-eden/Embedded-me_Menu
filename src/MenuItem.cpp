@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-05-30
+  Last mod.: 2024-06-02
 */
 
 #include "MenuItem.h"
@@ -46,8 +46,8 @@ TBool TMenuItem::CloneFrom(TMenuItem * Src)
 */
 void TMenuItem::Release()
 {
-  Command.ReleaseChunk();
-  Description.ReleaseChunk();
+  Command.Release();
+  Description.Release();
 }
 
 // Represent data
