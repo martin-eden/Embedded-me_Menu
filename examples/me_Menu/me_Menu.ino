@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-02
+  Last mod.: 2024-06-04
 */
 
 #include <me_Menu.h>
@@ -26,7 +26,15 @@ void loop()
 {
 }
 
+// Forwards:
+void Test_BasicUsage();
+
 void TestMenu()
+{
+  Test_BasicUsage();
+}
+
+void Test_BasicUsage()
 {
   using
     me_Menu::TMenu,
@@ -34,27 +42,25 @@ void TestMenu()
 
   TMenu Menu;
 
-  TMenuItem MenuItem;
+  TMenuItem Item;
 
-  MenuItem.Command.CloneFrom("Put");
-  MenuItem.Description.CloneFrom("Put data in range");
-  Menu.Add(&MenuItem);
+  Item.Command.Set("Put");
+  Item.Description.Set("Put data in range");
+  Menu.Add(&Item);
 
-  MenuItem.Command.CloneFrom("Get");
-  MenuItem.Description.CloneFrom("Get data in range");
-  Menu.Add(&MenuItem);
+  Item.Command.Set("Get");
+  Item.Description.Set("Get data in range");
+  Menu.Add(&Item);
 
-  MenuItem.Command.CloneFrom("SetRange");
-  MenuItem.Description.CloneFrom("Set memory range");
-  Menu.Add(&MenuItem);
+  Item.Command.Set("SetRange");
+  Item.Description.Set("Set memory range");
+  Menu.Add(&Item);
 
-  MenuItem.Command.CloneFrom("GetRange");
-  MenuItem.Description.CloneFrom("Get memory range");
-  Menu.Add(&MenuItem);
+  Item.Command.Set("GetRange");
+  Item.Description.Set("Get memory range");
+  Menu.Add(&Item);
 
   Menu.Print();
-
-  Menu.RemoveAll();
 }
 
 /*
@@ -63,4 +69,5 @@ void TestMenu()
   2024-05-30
   2024-06-01
   2024-06-02
+  2024-06-04
 */

@@ -20,30 +20,22 @@ using
 // Release memory upon death
 TMenuItem::~TMenuItem()
 {
-  /*
-  PrintTag();
-
-  printf(" ");
-  printf("Destructor is here.\n");
-  PrintWrappings();
-  */
-
   Release();
 }
 
-// Set fields to copies from <Src>
-TBool TMenuItem::CloneFrom(TMenuItem * Src)
+/*
+  Copy data from our specie
+*/
+TBool TMenuItem::Set(TMenuItem * Src)
 {
-  if (!Command.CloneFrom(&Src->Command))
+  if (!Command.Set(&Src->Command))
     return false;
-  if (!Description.CloneFrom(&Src->Description))
+  if (!Description.Set(&Src->Description))
     return false;
   return true;
 }
 
-/*
-  Release memory of fields
-*/
+// Release memory of fields
 void TMenuItem::Release()
 {
   Command.Release();

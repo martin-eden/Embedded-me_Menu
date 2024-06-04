@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-02
+  Last mod.: 2024-06-04
 */
 
 #pragma once
@@ -33,8 +33,8 @@ namespace me_MenuItem
     // Release memory upon death
     ~TMenuItem();
 
-    // Set fields according to <Src>
-    TBool CloneFrom(TMenuItem * Src);
+    // Copy from our specie
+    TBool Set(TMenuItem * Src);
 
     // Release memory of fields
     void Release();
@@ -53,4 +53,5 @@ namespace me_MenuItem
   2024-05-25
   2024-05-29
   2024-05-30 Owning memory for command and description
+  2024-06-04
 */

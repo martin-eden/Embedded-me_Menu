@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-02
+  Last mod.: 2024-06-04
 */
 
 #pragma once
@@ -24,10 +24,12 @@ namespace me_Menu
   {
     TQueue List;
 
+    ~TMenu();
+
     // Add item
     TBool Add(TMenuItem * MenuItem);
     // Remove all items
-    void RemoveAll();
+    void Release();
 
     // Debug print
     void PrintWrappings();
@@ -42,4 +44,5 @@ namespace me_Menu
 /*
   2024-05-30
   2024-06-02
+  2024-06-04
 */
