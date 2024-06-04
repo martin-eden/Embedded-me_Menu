@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-02
+  Last mod.: 2024-06-04
 */
 
 #include "me_Menu.h"
@@ -20,10 +20,20 @@ using
   me_List::TListNode;
 
 /*
+  Destructor
+
+  Release memory from list nodes and menu items inside.
+*/
+TMenu::~TMenu()
+{
+  Release();
+}
+
+/*
   Add menu item to menu
 
   We allocate memory for TMenuItem and TListNode.
-  Menu item data memory is allocated internally in CloneFrom().
+  Menu item data memory is allocated internally in Set().
 
   Memory allocations is done via TMemorySegment.Reserve().
   I found this way more sane and safe than via malloc() or "new".
@@ -39,7 +49,7 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
   }
   TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
 
-  if (!MenuItem->CloneFrom(OuterMenuItem))
+  if (!MenuItem->Set(OuterMenuItem))
   {
     // No memory to copy data (command and description)
     MenuItemSeg.Release();
@@ -80,9 +90,9 @@ TBool KillMenuItem(TListNode * Node)
 }
 
 /*
-  Remove all items from the list and release their memory
+  Release memory of all items in the list and memory of list.
 */
-void TMenu::RemoveAll()
+void TMenu::Release()
 {
   Traverse(List.Head, KillMenuItem);
   KillList(List.Head);
@@ -125,4 +135,5 @@ void TMenu::GetSelection()
   2024-05-30
   2024-06-01
   2024-06-02
+  2024-06-04
 */
