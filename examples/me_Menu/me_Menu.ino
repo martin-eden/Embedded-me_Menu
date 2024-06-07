@@ -62,7 +62,10 @@ void Test_BasicUsage()
 
   Menu.Print();
 
-  Menu.GetSelection(&Item);
+  while(!Menu.GetSelection(&Item));
+
+  Item.Description.Print();
+  printf("\n");
 }
 
 /*
