@@ -25,7 +25,7 @@ using
 /*
   Destructor
 
-  Release memory from list nodes and menu items inside.
+  Release memory at death.
 */
 TMenu::~TMenu()
 {
@@ -46,35 +46,35 @@ TMenu::~TMenu()
 */
 TBool TMenu::Add(TMenuItem * OuterMenuItem)
 {
-  TMemorySegment MenuItemSeg;
+  TMemorySegment ItemMem;
 
-  if (!MenuItemSeg.Reserve(sizeof(TMenuItem)))
+  if (!ItemMem.Reserve(sizeof(TMenuItem)))
   {
     // No memory for new menu item structure
     return false;
   }
-  TMenuItem * MenuItem = (TMenuItem *) MenuItemSeg.Start.Addr;
+  TMenuItem * Item = (TMenuItem *) ItemMem.Start.Addr;
 
-  if (!MenuItem->Set(OuterMenuItem))
+  if (!Item->Set(OuterMenuItem))
   {
     // No memory to copy data (command and description)
-    MenuItemSeg.Release();
+    ItemMem.Release();
     return false;
   }
 
-  TMemorySegment NodeSeg;
+  TMemorySegment NodeMem;
 
-  if (!NodeSeg.Reserve(sizeof(TListNode)))
+  if (!NodeMem.Reserve(sizeof(TListNode)))
   {
     // No memory for new list node
-    MenuItem->Release();
-    MenuItemSeg.Release();
+    Item->Release();
+    ItemMem.Release();
     return false;
   }
 
-  TListNode * ListNode = (TListNode *) NodeSeg.Start.Addr;
+  TListNode * ListNode = (TListNode *) NodeMem.Start.Addr;
 
-  ListNode->Data = (TUint_2) MenuItem;
+  ListNode->Data = (TUint_2) Item;
 
   List.Add(ListNode);
 
@@ -98,15 +98,15 @@ TBool KillMenuItem(TListNode * Node)
 
   Item->Release();
 
-  TMemorySegment ItemSeg;
-  ItemSeg.Start.Addr = (TUint_2) Item;
-  ItemSeg.Size = sizeof(TMenuItem);
-  ItemSeg.Release();
+  TMemorySegment ItemMem;
+  ItemMem.Start.Addr = (TUint_2) Item;
+  ItemMem.Size = sizeof(TMenuItem);
+  ItemMem.Release();
 
-  TMemorySegment ListNodeSeg;
-  ListNodeSeg.Start.Addr = (TUint_2) Node;
-  ListNodeSeg.Size = sizeof(TListNode);
-  ListNodeSeg.Release();
+  TMemorySegment NodeMem;
+  NodeMem.Start.Addr = (TUint_2) Node;
+  NodeMem.Size = sizeof(TListNode);
+  NodeMem.Release();
 
   return true;
 }
@@ -128,9 +128,9 @@ TBool PrintListNode(TListNode * ListNode)
 {
   using me_Menu::TMenuItem;
 
-  TMenuItem * MenuItem = (TMenuItem *) ListNode->Data;
+  TMenuItem * Item = (TMenuItem *) ListNode->Data;
 
-  MenuItem->Print();
+  Item->Print();
 
   return true;
 }
@@ -150,37 +150,6 @@ void TMenu::PrintWrappings()
 }
 
 /*
-  Get command from serial and match it to our list
-*/
-TBool TMenu::GetSelection(TMenuItem * ItemSelected)
-{
-  const TUint_2 InputBufferSize = 16;
-  TChar Buffer[InputBufferSize];
-
-  TMemorySegment BufferSeg;
-  BufferSeg.Start.Addr = (TUint_2) &Buffer;
-  BufferSeg.Size = sizeof(Buffer);
-
-  using namespace me_SerialTokenizer;
-
-  printf(": ");
-
-  TCapturedEntity Entity;
-
-  while (!GetEntity(&Entity, BufferSeg));
-
-  printf("\n");
-
-  if (Entity.IsTrimmed)
-  {
-    printf("Too long.\n");
-    return false;
-  }
-
-  return Match(ItemSelected, Entity.Segment);
-}
-
-/*
   Find entity in list
 
   We are matching string in <Entity> to <.Command> in one of
@@ -188,7 +157,7 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
 */
 TBool TMenu::Match(
   TMenuItem * ItemFound,
-  me_MemorySegment::TMemorySegment Entity
+  TMemorySegment Entity
 )
 {
   TListNode * Cursor = List.Head;
@@ -204,6 +173,37 @@ TBool TMenu::Match(
     Cursor = Cursor->Next;
   }
   return false;
+}
+
+/*
+  Get command from serial and match it to our list
+*/
+TBool TMenu::GetSelection(TMenuItem * ItemSelected)
+{
+  const TUint_2 InputBufferSize = 16;
+  TChar Buffer[InputBufferSize];
+
+  TMemorySegment BufferMem;
+  BufferMem.Start.Addr = (TUint_2) &Buffer;
+  BufferMem.Size = sizeof(Buffer);
+
+  using namespace me_SerialTokenizer;
+
+  printf(": ");
+
+  TCapturedEntity Entity;
+
+  while (!GetEntity(&Entity, BufferMem));
+
+  printf("\n");
+
+  if (Entity.IsTrimmed)
+  {
+    printf("Too long.\n");
+    return false;
+  }
+
+  return Match(ItemSelected, Entity.Segment);
 }
 
 /*
