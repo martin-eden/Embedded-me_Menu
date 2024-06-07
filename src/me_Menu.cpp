@@ -35,8 +35,11 @@ TMenu::~TMenu()
 /*
   Add menu item to menu
 
-  We allocate memory for TMenuItem and TListNode.
-  Menu item data memory is allocated internally in Set().
+  We are doing these memory allocations:
+
+    1. Structure of menu item
+    2. Data of menu item
+    3. Structure of list node.
 
   Memory allocations is done via TMemorySegment.Reserve().
   I found this way more sane and safe than via malloc() or "new".
@@ -71,7 +74,7 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 
   TListNode * ListNode = (TListNode *) NodeSeg.Start.Addr;
 
-  ListNode->Data = MenuItemSeg.Start.Addr;
+  ListNode->Data = (TUint_2) MenuItem;
 
   List.Add(ListNode);
 
