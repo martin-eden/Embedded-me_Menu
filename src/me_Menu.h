@@ -9,6 +9,7 @@
 
 #include <me_List.h>
 #include <me_BaseTypes.h>
+#include <me_MemorySegment.h> // for definition of entity to match
 
 #include "MenuItem.h"
 
@@ -37,7 +38,10 @@ namespace me_Menu
     void Print();
 
     // Get entity from stdin and match it with our commands
-    void GetSelection();
+    TBool GetSelection(TMenuItem * ItemSelected);
+
+    // Find entity in list
+    TBool Match(TMenuItem * ItemFound, me_MemorySegment::TMemorySegment Entity);
   };
 }
 

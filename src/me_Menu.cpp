@@ -11,6 +11,7 @@
 
 #include <me_List.h>
 #include <me_MemorySegment.h> // (Reserve/Release)Chunk()
+#include <me_SerialTokenizer.h> // GetEntity()
 #include <me_BaseTypes.h>
 
 using
@@ -18,6 +19,7 @@ using
   me_MemorySegment::TMemorySegment,
   me_BaseTypes::TBool,
   me_BaseTypes::TUint_2,
+  me_BaseTypes::TChar,
   me_List::TListNode;
 
 /*
@@ -144,8 +146,61 @@ void TMenu::PrintWrappings()
 {
 }
 
-void TMenu::GetSelection()
+/*
+  Get command from serial and match it to our list
+*/
+TBool TMenu::GetSelection(TMenuItem * ItemSelected)
 {
+  const TUint_2 InputBufferSize = 16;
+  TChar Buffer[InputBufferSize];
+
+  TMemorySegment BufferSeg;
+  BufferSeg.Start.Addr = (TUint_2) &Buffer;
+  BufferSeg.Size = sizeof(Buffer);
+
+  using namespace me_SerialTokenizer;
+
+  printf(": ");
+
+  TCapturedEntity Entity;
+
+  while (!GetEntity(&Entity, BufferSeg));
+
+  printf("\n");
+
+  if (Entity.IsTrimmed)
+  {
+    printf("Too long.\n");
+    return false;
+  }
+
+  return Match(ItemSelected, Entity.Segment);
+}
+
+/*
+  Find entity in list
+
+  We are matching string in <Entity> to <.Command> in one of
+  our items.
+*/
+TBool TMenu::Match(
+  TMenuItem * ItemFound,
+  me_MemorySegment::TMemorySegment Entity
+)
+{
+  TListNode * Cursor = List.Head;
+  while (Cursor != 0)
+  {
+    TMenuItem * CurItem = (TMenuItem *) Cursor->Data;
+    TMemorySegment ItemCommand = CurItem->Command.Get();
+    if (ItemCommand.IsEqualTo(Entity))
+    {
+      ItemFound->Set(CurItem);
+      return true;
+    }
+    Cursor = Cursor->Next;
+  }
+  return false;
 }
 
 /*

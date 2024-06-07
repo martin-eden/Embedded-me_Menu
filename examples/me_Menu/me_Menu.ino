@@ -61,6 +61,8 @@ void Test_BasicUsage()
   Menu.Add(&Item);
 
   Menu.Print();
+
+  Menu.GetSelection(&Item);
 }
 
 /*
