@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-04
+  Last mod.: 2024-06-07
 */
 
 #include "me_Menu.h"
@@ -17,6 +17,7 @@ using
   me_Menu::TMenu,
   me_MemorySegment::TMemorySegment,
   me_BaseTypes::TBool,
+  me_BaseTypes::TUint_2,
   me_List::TListNode;
 
 /*
@@ -77,6 +78,12 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 
 /*
   Release memory of menu item
+
+  We are releasing
+
+    1. Data of menu item
+    2. Structure of menu item
+    3. List node structure
 */
 TBool KillMenuItem(TListNode * Node)
 {
@@ -85,6 +92,16 @@ TBool KillMenuItem(TListNode * Node)
   TMenuItem * Item = (TMenuItem *) Node->Data;
 
   Item->Release();
+
+  TMemorySegment ItemSeg;
+  ItemSeg.Start.Addr = (TUint_2) Item;
+  ItemSeg.Size = sizeof(TMenuItem);
+  ItemSeg.Release();
+
+  TMemorySegment ListNodeSeg;
+  ListNodeSeg.Start.Addr = (TUint_2) Node;
+  ListNodeSeg.Size = sizeof(TListNode);
+  ListNodeSeg.Release();
 
   return true;
 }
@@ -136,4 +153,5 @@ void TMenu::GetSelection()
   2024-06-01
   2024-06-02
   2024-06-04
+  2024-06-07
 */
