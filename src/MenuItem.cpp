@@ -17,12 +17,6 @@ using
   me_BaseTypes::TUint_2,
   me_BaseTypes::TBool;
 
-// Release memory upon death
-TMenuItem::~TMenuItem()
-{
-  Release();
-}
-
 /*
   Copy data from our specie
 */

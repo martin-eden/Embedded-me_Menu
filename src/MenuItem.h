@@ -30,9 +30,6 @@ namespace me_MenuItem
     TManagedMemory Command;
     TManagedMemory Description;
 
-    // Release memory upon death
-    ~TMenuItem();
-
     // Copy from our specie
     TBool Set(TMenuItem * Src);
 
@@ -53,5 +50,6 @@ namespace me_MenuItem
   2024-05-25
   2024-05-29
   2024-05-30 Owning memory for command and description
-  2024-06-04
+  2024-06-04 Memory pwnage is delegated to TManagedMemory
+  2024-06-07
 */
