@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-07
+  Last mod.: 2024-06-12
 */
 
 #include "me_Menu.h"
@@ -88,31 +88,27 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 
     1. Data of menu item
     2. Structure of menu item
-    3. List node structure
+
+  List node structure is released in KillList().
 */
-TBool KillMenuItem(TListNode * Node)
+TBool KillMenuItem(TUint_2 Data)
 {
   using me_Menu::TMenuItem;
 
-  TMenuItem * Item = (TMenuItem *) Node->Data;
+  TMenuItem * Item = (TMenuItem *) Data;
 
   Item->Release();
 
   TMemorySegment ItemMem;
-  ItemMem.Start.Addr = (TUint_2) Item;
+  ItemMem.Start.Addr = Data;
   ItemMem.Size = sizeof(TMenuItem);
   ItemMem.Release();
-
-  TMemorySegment NodeMem;
-  NodeMem.Start.Addr = (TUint_2) Node;
-  NodeMem.Size = sizeof(TListNode);
-  NodeMem.Release();
 
   return true;
 }
 
 /*
-  Release memory of all items in the list and memory of list.
+  Release memory of list items and the list
 */
 void TMenu::Release()
 {
@@ -124,11 +120,11 @@ void TMenu::Release()
 /*
   Print menu item
 */
-TBool PrintListNode(TListNode * ListNode)
+TBool PrintListNode(TUint_2 Data)
 {
   using me_Menu::TMenuItem;
 
-  TMenuItem * Item = (TMenuItem *) ListNode->Data;
+  TMenuItem * Item = (TMenuItem *) Data;
 
   Item->Print();
 
@@ -212,4 +208,5 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
   2024-06-02
   2024-06-04
   2024-06-07
+  2024-06-12
 */
