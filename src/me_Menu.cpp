@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-12
+  Last mod.: 2024-06-14
 */
 
 #include "me_Menu.h"
@@ -11,12 +11,15 @@
 
 #include <me_List.h>
 #include <me_MemorySegment.h> // (Reserve/Release)Chunk()
+#include <me_ManagedMemory.h> // more modern way of managing memseg
 #include <me_SerialTokenizer.h> // GetEntity()
 #include <me_BaseTypes.h>
 
 using
   me_Menu::TMenu,
+  me_Menu::TMenuItem,
   me_MemorySegment::TMemorySegment,
+  me_ManagedMemory::TManagedMemory,
   me_BaseTypes::TBool,
   me_BaseTypes::TUint_2,
   me_BaseTypes::TChar,
@@ -39,7 +42,6 @@ TMenu::~TMenu()
 
     1. Structure of menu item
     2. Data of menu item
-    3. Structure of list node.
 
   Memory allocations is done via TMemorySegment.Reserve().
   I found this way more sane and safe than via malloc() or "new".
@@ -62,22 +64,13 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
     return false;
   }
 
-  TMemorySegment NodeMem;
-
-  if (!NodeMem.Reserve(sizeof(TListNode)))
+  if (!List.Add(ItemMem.Start.Addr))
   {
     // No memory for new list node
     Item->Release();
     ItemMem.Release();
     return false;
   }
-
-  TListNode * ListNode = (TListNode *) NodeMem.Start.Addr;
-
-  ListNode->Data = (TUint_2) Item;
-
-  List.Add(ListNode);
-
   return true;
 }
 
@@ -88,13 +81,12 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 
     1. Data of menu item
     2. Structure of menu item
-
-  List node structure is released in KillList().
 */
-TBool KillMenuItem(TUint_2 Data)
+TBool KillMenuItem(
+  TUint_2 Data,
+  TUint_2 HandlerData __attribute__((unused))
+)
 {
-  using me_Menu::TMenuItem;
-
   TMenuItem * Item = (TMenuItem *) Data;
 
   Item->Release();
@@ -112,18 +104,18 @@ TBool KillMenuItem(TUint_2 Data)
 */
 void TMenu::Release()
 {
-  Traverse(List.Head, KillMenuItem);
-  KillList(List.Head);
-  List.Head = 0;
+  List.Traverse(KillMenuItem);
+  List.Release();
 }
 
 /*
   Print menu item
 */
-TBool PrintListNode(TUint_2 Data)
+TBool PrintListNode(
+  TUint_2 Data,
+  TUint_2 HandlerData __attribute__((unused))
+)
 {
-  using me_Menu::TMenuItem;
-
   TMenuItem * Item = (TMenuItem *) Data;
 
   Item->Print();
@@ -137,7 +129,7 @@ TBool PrintListNode(TUint_2 Data)
 void TMenu::Print()
 {
   printf("--\n");
-  me_List::Traverse(List.Head, PrintListNode);
+  List.Traverse(PrintListNode);
   printf("==\n");
 }
 
@@ -145,61 +137,88 @@ void TMenu::PrintWrappings()
 {
 }
 
+struct TLookedAndFound
+{
+  TMemorySegment LookingFor;
+  TMenuItem * ItemFound;
+};
+
 /*
   Find entity in list
 
-  We are matching string in <Entity> to <.Command> in one of
+  We are matching string in <State.LookingFor> to <.Command> in one of
   our items.
 */
-TBool TMenu::Match(
-  TMenuItem * ItemFound,
-  TMemorySegment Entity
+TBool Match(
+  TUint_2 NodeData,
+  TUint_2 HandlerData
 )
 {
-  TListNode * Cursor = List.Head;
-  while (Cursor != 0)
+  TMenuItem * MenuItem = (TMenuItem *) NodeData;
+  TLookedAndFound * State = (TLookedAndFound *) HandlerData;
+
+  if (MenuItem->Command.Get().IsEqualTo(State->LookingFor))
   {
-    TMenuItem * CurItem = (TMenuItem *) Cursor->Data;
-    TMemorySegment ItemCommand = CurItem->Command.Get();
-    if (ItemCommand.IsEqualTo(Entity))
-    {
-      ItemFound->Set(CurItem);
-      return true;
-    }
-    Cursor = Cursor->Next;
+    State->ItemFound = MenuItem;
+    return false;
   }
-  return false;
+
+  return true;
 }
 
 /*
   Get command from serial and match it to our list
+
+  If we found menu item in our list with same <.Command>, copy
+  that menu item to provided argument. Yes, we are returning copy.
 */
 TBool TMenu::GetSelection(TMenuItem * ItemSelected)
 {
-  const TUint_2 InputBufferSize = 16;
-  TChar Buffer[InputBufferSize];
-
-  TMemorySegment BufferMem;
-  BufferMem.Start.Addr = (TUint_2) &Buffer;
-  BufferMem.Size = sizeof(Buffer);
-
-  using namespace me_SerialTokenizer;
-
-  printf(": ");
-
-  TCapturedEntity Entity;
-
-  while (!GetEntity(&Entity, BufferMem));
-
-  printf("\n");
-
-  if (Entity.IsTrimmed)
+  // Part one: get string
+  TManagedMemory Input;
   {
-    printf("Too long.\n");
-    return false;
+    const TUint_2 InputBufferSize = 16;
+    TChar Buffer[InputBufferSize];
+
+    TMemorySegment BufferMem;
+    BufferMem.Start.Addr = (TUint_2) &Buffer;
+    BufferMem.Size = sizeof(Buffer);
+
+    printf(": ");
+
+    me_SerialTokenizer::TCapturedEntity Entity;
+
+    me_SerialTokenizer::WaitEntity(&Entity, BufferMem);
+
+    printf("\n");
+
+    if (Entity.IsTrimmed)
+    {
+      printf("Too long.\n");
+      return false;
+    }
+
+    Input.Set(Entity.Segment);
   }
 
-  return Match(ItemSelected, Entity.Segment);
+  // Part two: search by this string
+  TLookedAndFound SearchState;
+  {
+    SearchState.LookingFor = Input.Get();
+    SearchState.ItemFound = 0;
+
+    List.Traverse(Match, (TUint_2) &SearchState);
+  }
+
+  // Part three: fulfill contract
+  {
+    if (SearchState.ItemFound != 0)
+    {
+      ItemSelected->Set(SearchState.ItemFound);
+      return true;
+    }
+    return false;
+  }
 }
 
 /*
@@ -209,4 +228,6 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
   2024-06-04
   2024-06-07
   2024-06-12
+  2024-06-13
+  2024-06-14
 */

@@ -39,9 +39,6 @@ namespace me_Menu
 
     // Get entity from stdin and match it with our commands
     TBool GetSelection(TMenuItem * ItemSelected);
-
-    // Find entity in list
-    TBool Match(TMenuItem * ItemFound, me_MemorySegment::TMemorySegment Entity);
   };
 }
 
