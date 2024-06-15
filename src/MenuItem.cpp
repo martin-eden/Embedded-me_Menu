@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-02
+  Last mod.: 2024-06-15
 */
 
 #include "MenuItem.h"
@@ -36,23 +36,11 @@ void TMenuItem::Release()
   Description.Release();
 }
 
-// Represent data
-void TMenuItem::Print()
-{
-  Command.Print();
-  printf(" - ");
-  Description.Print();
-  printf("\n");
-}
-
-void TMenuItem::PrintTag()
-{
-  printf("[TMenuItem 0x%04X]", (TUint_2) this);
-}
-
 // Represent state
 void TMenuItem::PrintWrappings()
 {
+  printf("[TMenuItem 0x%04X]", (TUint_2) this);
+  printf(" ");
   printf("(\n");
 
   printf("  Command ");
@@ -71,4 +59,5 @@ void TMenuItem::PrintWrappings()
   2024-05-29
   2024-05-30
   2024-06-02
+  2024-06-15
 */
