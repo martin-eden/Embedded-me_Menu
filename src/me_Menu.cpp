@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-14
+  Last mod.: 2024-06-15
 */
 
 #include "me_Menu.h"
@@ -82,7 +82,7 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
     1. Data of menu item
     2. Structure of menu item
 */
-TBool KillMenuItem(
+void KillMenuItem(
   TUint_2 Data,
   TUint_2 HandlerData __attribute__((unused))
 )
@@ -95,8 +95,6 @@ TBool KillMenuItem(
   ItemMem.Start.Addr = Data;
   ItemMem.Size = sizeof(TMenuItem);
   ItemMem.Release();
-
-  return true;
 }
 
 /*
@@ -111,7 +109,7 @@ void TMenu::Release()
 /*
   Print menu item
 */
-TBool PrintListNode(
+void PrintListNode(
   TUint_2 Data,
   TUint_2 HandlerData __attribute__((unused))
 )
@@ -119,8 +117,6 @@ TBool PrintListNode(
   TMenuItem * Item = (TMenuItem *) Data;
 
   Item->Print();
-
-  return true;
 }
 
 /*
@@ -149,7 +145,7 @@ struct TLookedAndFound
   We are matching string in <State.LookingFor> to <.Command> in one of
   our items.
 */
-TBool Match(
+void Match(
   TUint_2 NodeData,
   TUint_2 HandlerData
 )
@@ -158,12 +154,7 @@ TBool Match(
   TLookedAndFound * State = (TLookedAndFound *) HandlerData;
 
   if (MenuItem->Command.Get().IsEqualTo(State->LookingFor))
-  {
     State->ItemFound = MenuItem;
-    return false;
-  }
-
-  return true;
 }
 
 /*
