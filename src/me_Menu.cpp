@@ -116,7 +116,10 @@ void PrintListNode(
 {
   TMenuItem * Item = (TMenuItem *) Data;
 
-  Item->Print();
+  Item->Command.Print();
+  printf(" - ");
+  Item->Description.Print();
+  printf("\n");
 }
 
 /*

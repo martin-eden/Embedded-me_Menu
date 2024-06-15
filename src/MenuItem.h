@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-04
+  Last mod.: 2024-06-15
 */
 
 #pragma once
@@ -14,8 +14,7 @@ namespace me_MenuItem
 {
   using
     me_ManagedMemory::TManagedMemory,
-    me_BaseTypes::TBool,
-    me_BaseTypes::TChar;
+    me_BaseTypes::TBool;
 
   /*
     Menu item
@@ -36,13 +35,8 @@ namespace me_MenuItem
     // Release memory of fields
     void Release();
 
-    // Print data (production)
-    void Print();
-
-    // Print state (test/debug)
+    // Print state
     void PrintWrappings();
-    // Print [0x7389 TMenuItem] (test/debug)
-    void PrintTag();
   };
 }
 
