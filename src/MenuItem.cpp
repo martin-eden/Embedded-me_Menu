@@ -26,6 +26,8 @@ TBool TMenuItem::Set(TMenuItem * Src)
     return false;
   if (!Description.Set(&Src->Description))
     return false;
+  Method = Src->Method;
+
   return true;
 }
 
