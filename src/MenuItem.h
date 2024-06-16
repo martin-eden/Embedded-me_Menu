@@ -40,6 +40,7 @@ namespace me_MenuItem
       }
       void Run()
       {
+        if (DataAddr == 0) return;
         typedef void (*TMethod) (TUint_2 DataAddr);
         TMethod Method = (TMethod) MethodAddr;
         Method(DataAddr);
@@ -62,6 +63,8 @@ namespace me_MenuItem
 
     // Copy from our specie
     TBool Set(TMenuItem * Src);
+
+    void Run() { Method.Run(); };
 
     // Release memory of fields
     void Release();

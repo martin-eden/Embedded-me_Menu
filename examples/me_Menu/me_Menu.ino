@@ -153,7 +153,7 @@ void TestMenu()
   {
     while(!Menu.GetSelection(&Item));
 
-    Item.Method.Run();
+    Item.Run();
   }
 }
 
