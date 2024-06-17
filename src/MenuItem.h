@@ -64,7 +64,7 @@ namespace me_MenuItem
     // Copy from our specie
     TBool Set(TMenuItem * Src);
 
-    void Run() { Method.Run(); };
+    void Execute() { Method.Run(); };
 
     // Release memory of fields
     void Release();
