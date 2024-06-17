@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-15
+  Last mod.: 2024-06-17
 */
 
 #include "me_Menu.h"
@@ -169,7 +169,7 @@ void Match(
 TBool TMenu::GetSelection(TMenuItem * ItemSelected)
 {
   // Part one: get string
-  TManagedMemory Input;
+  TManagedMemory String;
   {
     const TUint_2 InputBufferSize = 16;
     TChar Buffer[InputBufferSize];
@@ -178,27 +178,23 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
     BufferMem.Start.Addr = (TUint_2) &Buffer;
     BufferMem.Size = sizeof(Buffer);
 
-    printf(": ");
-
     me_SerialTokenizer::TCapturedEntity Entity;
 
     me_SerialTokenizer::WaitEntity(&Entity, BufferMem);
 
-    printf("\n");
-
     if (Entity.IsTrimmed)
     {
-      printf("Too long.\n");
+      // Entity was too long for our input buffer
       return false;
     }
 
-    Input.Set(Entity.Segment);
+    String.Set(Entity.Segment);
   }
 
   // Part two: search by this string
   TLookedAndFound SearchState;
   {
-    SearchState.LookingFor = Input.Get();
+    SearchState.LookingFor = String.Get();
     SearchState.ItemFound = 0;
 
     List.Traverse(Match, (TUint_2) &SearchState);

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-16
+  Last mod.: 2024-06-17
 */
 
 #include <me_Menu.h>
@@ -21,7 +21,7 @@ void setup()
   Serial.begin(me_UartSpeeds::Arduino_Normal_Bps);
   Serial.setTimeout(15);
   InstallStandardStreams();
-  printf("[me_MenuItem] We are here.\n");
+  printf("[me_Menu] We are here.\n");
 
   TestMenu();
 
@@ -33,21 +33,22 @@ void loop()
 }
 
 /*
-  Below comes menu demonstration
+  Sample class that is used for menu demonstration
 
-  I thought about very simple but with it's own state.
+  For illustration I thought about something very simple
+  but with it's own state.
 
-  I came with OUTPUT_LED on/off/get-state:
+  I came with OUTPUT_LED manager:
 
-    g - Print last value written
-    t - Set led HIGH
-    c - Set led LOW
+    g - (g)et - PrintState() - Print last value written
+    c - (c)lear - SetLow() - Set led LOW
+    t - se(t) - SetHigh() - Set led HIGH
 
-  Commands actually strings, they don't need to be characters.
+  Commands are strings, they don't need to be one character.
   But main intention of [me_Menu] is program-to-program channel,
-  think about G codes.
+  so commands should be as short as possible to minimize channel
+  transmission time.
 */
-
 class TBuiltinLed
 {
   TSint_1 State = -1; // -1 - unknown, 0 - LOW, 1 - HIGH
@@ -77,7 +78,6 @@ void TBuiltinLed::PrintState()
 
 void TBuiltinLed::SetLow()
 {
-  // LED_BUILTIN is Arduino stock #define, so as LOW and HIGH
   digitalWrite(LED_BUILTIN, LOW);
   State = 0;
 }
@@ -91,10 +91,12 @@ void TBuiltinLed::SetHigh()
 /*
   Ugly wrappers for class methods
 
-  Because I did not find a way to get pointer to member function.
-  <TMethodCall> knows nothing about fancy classes it store. And should
-  know nothing. It's job just call zero-arguments method with pointer
-  to data.
+  Because I did not find a way to get pointer to member function
+  when we are setting <.Method>.
+
+  <TMethodCall> knows nothing about fancy classes it stores.
+  And should know nothing. It's job just to call routine with
+  TUint_2 argument.
 */
 void PrintState_wrap(TUint_2 Instance)
 {
@@ -115,11 +117,13 @@ void SetHigh_wrap(TUint_2 Instance)
 }
 
 /*
-  Here comes menu creation
+  Menu population and execution
 
   This function never returns, there are no "exit" command.
-*/
 
+  For more complex cases you want to separate population from execution.
+  Make sure that object for menu items handlers is alive at execution.
+*/
 void TestMenu()
 {
   TBuiltinLed LedManager;
@@ -153,7 +157,7 @@ void TestMenu()
   {
     while(!Menu.GetSelection(&Item));
 
-    Item.Run();
+    Item.Execute();
   }
 }
 

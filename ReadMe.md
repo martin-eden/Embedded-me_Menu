@@ -1,10 +1,30 @@
 # What
 
-(2024-05 .. )
+(2024-05 .. 2024-06)
 
-Arduino library for text menu navigation via Serial.
+Text menu for commands. Arduino library.
 
-Work in progress but it's gonna be nice functionality.
+Menu is a list. Maybe another month I'll make it a tree.
+
+
+## Example output
+
+```
+[me_Menu] We are here.
+--
+g - Print last value written
+c - Set led LOW
+t - Set led HIGH
+==
+g
+State(unknown)
+c
+g
+State(LOW)
+t
+g
+State(HIGH)
+```
 
 ## Requirements
 

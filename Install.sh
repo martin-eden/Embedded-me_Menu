@@ -8,6 +8,7 @@ arduino-cli \
       https://github.com/martin-eden/Embedded-me_MemoryPoint \
       https://github.com/martin-eden/Embedded-me_MemorySegment \
       https://github.com/martin-eden/Embedded-me_List \
+      https://github.com/martin-eden/Embedded-me_SerialTokenizer \
       https://github.com/martin-eden/Embedded-me_InstallStandardStreams \
       https://github.com/martin-eden/Embedded-me_UartSpeeds
 
