@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-04
+  Last mod.: 2024-06-20
 */
 
 #pragma once
@@ -21,24 +21,30 @@ namespace me_Menu
     me_BaseTypes::TBool,
     me_MenuItem::TMenuItem;
 
-  struct TMenu
+  class TMenu
   {
     TQueue List;
 
-    ~TMenu();
+    public:
 
-    // Add item
-    TBool Add(TMenuItem * MenuItem);
-    // Remove all items
-    void Release();
+      ~TMenu();
 
-    // Debug print
-    void PrintWrappings();
-    // Print menu list
-    void Print();
+      // Add item
+      TBool Add(TMenuItem * MenuItem);
+      // Remove all items
+      void Release();
+      // Run
+      void Run();
 
-    // Get entity from stdin and match it with our commands
-    TBool GetSelection(TMenuItem * ItemSelected);
+      // Debug print
+      void PrintWrappings();
+      // Print menu list
+      void Print();
+
+    protected:
+
+      // Get entity from stdin and match it with our commands
+      TBool GetSelection(TMenuItem * ItemSelected);
   };
 }
 
@@ -46,4 +52,5 @@ namespace me_Menu
   2024-05-30
   2024-06-02
   2024-06-04
+  2024-06-20
 */

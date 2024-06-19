@@ -107,6 +107,21 @@ void TMenu::Release()
 }
 
 /*
+  Infinite loop of getting data and executing corresponding item
+*/
+void TMenu::Run()
+{
+  TMenuItem Item;
+
+  while (true)
+  {
+    while(!GetSelection(&Item));
+
+    Item.Execute();
+  }
+}
+
+/*
   Print menu item
 */
 void PrintListNode(
