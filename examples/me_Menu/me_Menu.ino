@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-17
+  Last mod.: 2024-06-20
 */
 
 #include <me_Menu.h>
@@ -12,7 +12,7 @@
 #include <me_BaseTypes.h>
 
 using
-  me_BaseTypes::TSint_1,
+  me_BaseTypes::TUint_1,
   me_BaseTypes::TUint_2;
 
 void setup()
@@ -23,7 +23,7 @@ void setup()
   InstallStandardStreams();
   printf("[me_Menu] We are here.\n");
 
-  TestMenu();
+  Test();
 
   printf("Done.\n");
 }
@@ -51,7 +51,7 @@ void loop()
 */
 class TBuiltinLed
 {
-  TSint_1 State = -1; // -1 - unknown, 0 - LOW, 1 - HIGH
+  TUint_1 State = 0; // 0 - unknown, 1 - LOW, 2 - HIGH
 
   public:
     TBuiltinLed() { pinMode(LED_BUILTIN, OUTPUT); };
@@ -64,11 +64,11 @@ void TBuiltinLed::PrintState()
 {
   printf("State(");
 
-  if (State == -1)
+  if (State == 0)
     printf("unknown");
-  else if (State == 0)
-    printf("LOW");
   else if (State == 1)
+    printf("LOW");
+  else if (State == 2)
     printf("HIGH");
   else
     printf("?"); // WTF?
@@ -79,13 +79,13 @@ void TBuiltinLed::PrintState()
 void TBuiltinLed::SetLow()
 {
   digitalWrite(LED_BUILTIN, LOW);
-  State = 0;
+  State = 1;
 }
 
 void TBuiltinLed::SetHigh()
 {
   digitalWrite(LED_BUILTIN, HIGH);
-  State = 1;
+  State = 2;
 }
 
 /*
@@ -116,49 +116,47 @@ void SetHigh_wrap(TUint_2 Instance)
   LedManager->SetHigh();
 }
 
+TBuiltinLed LedManager;
+
 /*
-  Menu population and execution
+  Populate menu
 
-  This function never returns, there are no "exit" command.
-
-  For more complex cases you want to separate population from execution.
-  Make sure that object for menu items handlers is alive at execution.
+  When wiring item handlers we need to see class instance,
+  <LedManager> in this case.
 */
-void TestMenu()
+void AddItems(me_Menu::TMenu * Menu)
 {
-  TBuiltinLed LedManager;
-
-  using
-    me_Menu::TMenu,
-    me_Menu::TMenuItem;
-
-  TMenu Menu;
-
-  TMenuItem Item;
+  me_Menu::TMenuItem Item;
 
   Item.Command.Set("g");
   Item.Description.Set("Print last value written");
   Item.Method.Set((TUint_2) &LedManager, (TUint_2) &PrintState_wrap);
-  Menu.Add(&Item);
+  Menu->Add(&Item);
 
   Item.Command.Set("c");
   Item.Description.Set("Set led LOW");
   Item.Method.Set((TUint_2) &LedManager, (TUint_2) &SetLow_wrap);
-  Menu.Add(&Item);
+  Menu->Add(&Item);
 
   Item.Command.Set("t");
   Item.Description.Set("Set led HIGH");
   Item.Method.Set((TUint_2) &LedManager, (TUint_2) &SetHigh_wrap);
-  Menu.Add(&Item);
+  Menu->Add(&Item);
+}
 
+/*
+  Menu list life
+
+  This function never returns, there are no "exit" command
+  in Menu.Run() so far.
+*/
+void Test()
+{
+  me_Menu::TMenu Menu;
+
+  AddItems(&Menu);
   Menu.Print();
-
-  while (true)
-  {
-    while(!Menu.GetSelection(&Item));
-
-    Item.Execute();
-  }
+  Menu.Run();
 }
 
 /*
@@ -169,4 +167,5 @@ void TestMenu()
   2024-06-02
   2024-06-04
   2024-06-16
+  2024-06-20
 */
