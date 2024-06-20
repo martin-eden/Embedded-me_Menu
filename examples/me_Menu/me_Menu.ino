@@ -25,7 +25,7 @@ void setup()
 
   Test();
 
-  printf("Done.\n");
+  printf("[me_Menu] Done.\n");
 }
 
 void loop()
@@ -40,7 +40,7 @@ void loop()
 
   I came with OUTPUT_LED manager:
 
-    g - (g)et - PrintState() - Print last value written
+    g - (g)et - PrintState() - Print led state
     c - (c)lear - SetLow() - Set led LOW
     t - se(t) - SetHigh() - Set led HIGH
 
@@ -91,12 +91,7 @@ void TBuiltinLed::SetHigh()
 /*
   Ugly wrappers for class methods
 
-  Because I did not find a way to get pointer to member function
-  when we are setting <.Method>.
-
-  <TMethodCall> knows nothing about fancy classes it stores.
-  And should know nothing. It's job just to call routine with
-  TUint_2 argument.
+  Because I did not find a way to get pointer to member function.
 */
 void PrintState_wrap(TUint_2 Instance)
 {
@@ -129,7 +124,7 @@ void AddItems(me_Menu::TMenu * Menu)
   me_Menu::TMenuItem Item;
 
   Item.Command.Set("g");
-  Item.Description.Set("Print last value written");
+  Item.Description.Set("Print led state");
   Item.Method.Set((TUint_2) &LedManager, (TUint_2) &PrintState_wrap);
   Menu->Add(&Item);
 
@@ -146,15 +141,13 @@ void AddItems(me_Menu::TMenu * Menu)
 
 /*
   Menu list life
-
-  This function never returns, there are no "exit" command
-  in Menu.Run() so far.
 */
 void Test()
 {
   me_Menu::TMenu Menu;
 
   AddItems(&Menu);
+  Menu.AddBuiltinCommands();
   Menu.Print();
   Menu.Run();
 }
