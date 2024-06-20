@@ -1,8 +1,8 @@
-// Text menu navigation via Serial
+// Communication channel commands handler
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-17
+  Last mod.: 2024-06-20
 */
 
 #include "me_Menu.h"
@@ -75,7 +75,7 @@ TBool TMenu::Add(TMenuItem * OuterMenuItem)
 }
 
 /*
-  Release memory of menu item
+  List handler: release item memory
 
   We are releasing
 
@@ -107,14 +107,29 @@ void TMenu::Release()
 }
 
 /*
-  Infinite loop of getting data and executing corresponding item
+  Release() wrapper for builtin command
+
+  Release() will empty list and empty list is exit condition
+  in Run() loop.
+*/
+void Release_wrap(TUint_2 Instance)
+{
+  TMenu * Menu = (TMenu *) Instance;
+  Menu->Release();
+}
+
+/*
+  Loop of getting data and executing corresponding item
+  for non-empty list.
+
+  Yeah, there should be exit condition if I want menu trees.
 */
 void TMenu::Run()
 {
-  TMenuItem Item;
-
-  while (true)
+  while (!List.IsEmpty())
   {
+    TMenuItem Item;
+
     while(!GetSelection(&Item));
 
     Item.Execute();
@@ -122,7 +137,7 @@ void TMenu::Run()
 }
 
 /*
-  Print menu item
+  List handler: print item
 */
 void PrintListNode(
   TUint_2 Data,
@@ -147,8 +162,38 @@ void TMenu::Print()
   printf("==\n");
 }
 
-void TMenu::PrintWrappings()
+/*
+  Print() wrapper for built-in command
+*/
+void Print_wrap(TUint_2 Instance)
 {
+  TMenu * Menu = (TMenu *) Instance;
+  Menu->Print();
+}
+
+/*
+  Add our internal commands:
+
+    ? - List commands
+    ^ - Exit
+*/
+TBool TMenu::AddBuiltinCommands()
+{
+  TMenuItem Item;
+
+  Item.Command.Set("?");
+  Item.Description.Set("List commands");
+  Item.Method.Set((TUint_2) this, (TUint_2) &Print_wrap);
+  if (!Add(&Item))
+    return false;
+
+  Item.Command.Set("^");
+  Item.Description.Set("Exit");
+  Item.Method.Set((TUint_2) this, (TUint_2) &Release_wrap);
+  if (!Add(&Item))
+    return false;
+
+  return true;
 }
 
 struct TLookedAndFound
@@ -158,7 +203,7 @@ struct TLookedAndFound
 };
 
 /*
-  Find entity in list
+  List handler: find entity
 
   We are matching string in <State.LookingFor> to <.Command> in one of
   our items.
@@ -186,7 +231,7 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
   // Part one: get string
   TManagedMemory String;
   {
-    const TUint_2 InputBufferSize = 16;
+    const TUint_2 InputBufferSize = 32;
     TChar Buffer[InputBufferSize];
 
     TMemorySegment BufferMem;
@@ -235,4 +280,5 @@ TBool TMenu::GetSelection(TMenuItem * ItemSelected)
   2024-06-12
   2024-06-13
   2024-06-14
+  2024-06-20
 */

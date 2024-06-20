@@ -1,8 +1,8 @@
-// WIP. Menu navigation
+// Managing endpoints
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-20
+  Last mod.: 2024-06-21
 */
 
 #pragma once
@@ -26,7 +26,6 @@ namespace me_Menu
     TQueue List;
 
     public:
-
       ~TMenu();
 
       // Add item
@@ -36,13 +35,13 @@ namespace me_Menu
       // Run
       void Run();
 
-      // Debug print
-      void PrintWrappings();
       // Print menu list
       void Print();
 
-    protected:
+      // Add builtin commands: list, exit
+      TBool AddBuiltinCommands();
 
+    protected:
       // Get entity from stdin and match it with our commands
       TBool GetSelection(TMenuItem * ItemSelected);
   };
@@ -53,4 +52,5 @@ namespace me_Menu
   2024-06-02
   2024-06-04
   2024-06-20
+  2024-06-21
 */
