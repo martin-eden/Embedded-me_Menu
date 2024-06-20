@@ -2,12 +2,19 @@
 
 (2024-05 .. 2024-06)
 
-Text menu for commands. Arduino library.
+Text menu and handler for commands. Arduino library.
 
-Menu is a list. Maybe another month I'll make it a tree.
+Build your device handler with this!
 
+No infinite "if-else" code spans to handle command.
 
-## Example output
+You populate list (aka "menu") at your pace and at your places.
+
+Each item is command, description and handler.
+
+Then call "Run()" and it will handle input and call your handlers.
+
+## Example interaction
 
 ```
 [me_Menu] We are here.
@@ -15,15 +22,17 @@ Menu is a list. Maybe another month I'll make it a tree.
 g - Print last value written
 c - Set led LOW
 t - Set led HIGH
+? - List commands
+^ - Exit
 ==
 g
 State(unknown)
-c
-g
-State(LOW)
-t
-g
+t g
 State(HIGH)
+c g
+State(LOW)
+^
+[me_Menu] Done.
 ```
 
 ## Requirements
