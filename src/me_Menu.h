@@ -9,7 +9,6 @@
 
 #include <me_List.h>
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h> // for definition of entity to match
 
 #include "MenuItem.h"
 
@@ -17,7 +16,6 @@ namespace me_Menu
 {
   using
     me_List::TQueue,
-    me_List::TStack,
     me_BaseTypes::TBool,
     me_MenuItem::TMenuItem;
 
@@ -32,18 +30,20 @@ namespace me_Menu
       TBool Add(TMenuItem * MenuItem);
       // Remove all items
       void Release();
+      // Print menu list
+      void Print();
+      // Add builtin commands: list, exit
+      TBool AddBuiltinCommands();
       // Run
       void Run();
 
-      // Print menu list
-      void Print();
-
-      // Add builtin commands: list, exit
-      TBool AddBuiltinCommands();
-
     protected:
       // Get entity from stdin and match it with our commands
-      TBool GetSelection(TMenuItem * ItemSelected);
+      TBool GetCommand(TMenuItem * ItemSelected);
+      // Add "list" ("?") command
+      TBool AddListCommand();
+      // Add "exit" ("^") command
+      TBool AddExitCommand();
   };
 }
 
