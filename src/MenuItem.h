@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-16
+  Last mod.: 2024-06-23
 */
 
 #pragma once
@@ -63,15 +63,18 @@ namespace me_MenuItem
 
     // Copy from our specie
     TBool Set(TMenuItem * Src);
-
+    // [debug] Print state
+    void PrintWrappings();
+    // Run item handler
     void Execute() { Method.Run(); };
-
     // Release memory of fields
     void Release();
-
-    // Print state
-    void PrintWrappings();
   };
+
+  // Allocate mem for struc and clone from
+  TBool SpawnItem(TMenuItem * * Item, TMenuItem * Value);
+  // Release derived memory and struc
+  void KillItem(TMenuItem * Item);
 }
 
 /*
