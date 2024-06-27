@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-20
+  Last mod.: 2024-06-27
 */
 
 #include <me_Menu.h>
@@ -17,20 +17,23 @@ using
 
 void setup()
 {
-  delay(4000);
   Serial.begin(me_UartSpeeds::Arduino_Normal_Bps);
+
+  // Serial timeout (ms) is essential when reading from stream
   Serial.setTimeout(15);
+
   InstallStandardStreams();
+
   printf("[me_Menu] We are here.\n");
-
   Test();
-
   printf("[me_Menu] Done.\n");
 }
 
 void loop()
 {
 }
+
+// --
 
 /*
   Sample class that is used for menu demonstration
@@ -45,9 +48,9 @@ void loop()
     t - se(t) - SetHigh() - Set led HIGH
 
   Commands are strings, they don't need to be one character.
-  But main intention of [me_Menu] is program-to-program channel,
-  so commands should be as short as possible to minimize channel
-  transmission time.
+
+  Design intention of [me_Menu] is program-to-program channel,
+  so commands should be short to minimize transmission time.
 */
 class TBuiltinLed
 {
@@ -92,24 +95,46 @@ void TBuiltinLed::SetHigh()
   Ugly wrappers for class methods
 
   Because I did not find a way to get pointer to member function.
+
+  We are using universal
+
+    handler data instance
+    ~~~~~~~ ~~~~ ~~~~~~~~
+      ui2    ui2   ui2
+
+  approach to call function with data and upvalues.
+
+  In this case, we have nothing for "data" and "upvalues" are
+  address of class instance.
 */
-void PrintState_wrap(TUint_2 Instance)
+void PrintState_wrap(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
+  TBuiltinLed * LedManager = (TBuiltinLed *) State;
   LedManager->PrintState();
 }
 
-void SetLow_wrap(TUint_2 Instance)
+void SetLow_wrap(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
+  TBuiltinLed * LedManager = (TBuiltinLed *) State;
   LedManager->SetLow();
 }
 
-void SetHigh_wrap(TUint_2 Instance)
+void SetHigh_wrap(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
+  TBuiltinLed * LedManager = (TBuiltinLed *) State;
   LedManager->SetHigh();
 }
+
+// --
 
 TBuiltinLed LedManager;
 
@@ -125,19 +150,21 @@ void AddItems(me_Menu::TMenu * Menu)
 
   Item.Command.Set("g");
   Item.Description.Set("Print led state");
-  Item.Method.Set((TUint_2) &LedManager, (TUint_2) &PrintState_wrap);
+  Item.Method.Set(PrintState_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
   Item.Command.Set("c");
   Item.Description.Set("Set led LOW");
-  Item.Method.Set((TUint_2) &LedManager, (TUint_2) &SetLow_wrap);
+  Item.Method.Set(SetLow_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
   Item.Command.Set("t");
   Item.Description.Set("Set led HIGH");
-  Item.Method.Set((TUint_2) &LedManager, (TUint_2) &SetHigh_wrap);
+  Item.Method.Set(SetHigh_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 }
+
+// --
 
 /*
   Menu list life
@@ -161,4 +188,5 @@ void Test()
   2024-06-04
   2024-06-16
   2024-06-20
+  2024-06-27
 */

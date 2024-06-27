@@ -21,9 +21,12 @@ using
   Release() will empty list and empty list is exit condition
   in Run() loop.
 */
-void Release_wrap(TUint_2 Instance)
+void Release_wrap(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
 {
-  TMenu * Menu = (TMenu *) Instance;
+  TMenu * Menu = (TMenu *) State;
   Menu->Release();
 }
 
@@ -38,7 +41,7 @@ TBool TMenu::AddExitCommand()
 
   Item.Command.Set("^");
   Item.Description.Set("Exit");
-  Item.Method.Set((TUint_2) this, (TUint_2) &Release_wrap);
+  Item.Method.Set(Release_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
 
@@ -48,9 +51,12 @@ TBool TMenu::AddExitCommand()
 /*
   Print() wrapper for built-in command
 */
-void Print_wrap(TUint_2 Instance)
+void Print_wrap(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
 {
-  TMenu * Menu = (TMenu *) Instance;
+  TMenu * Menu = (TMenu *) State;
   Menu->Print();
 }
 
@@ -65,7 +71,7 @@ TBool TMenu::AddListCommand()
 
   Item.Command.Set("?");
   Item.Description.Set("List commands");
-  Item.Method.Set((TUint_2) this, (TUint_2) &Print_wrap);
+  Item.Method.Set(Print_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
 
