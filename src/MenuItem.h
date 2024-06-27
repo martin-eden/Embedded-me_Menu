@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-23
+  Last mod.: 2024-06-27
 */
 
 #pragma once
@@ -17,33 +17,31 @@ namespace me_MenuItem
   using
     me_ManagedMemory::TManagedMemory,
     me_BaseTypes::TBool,
-    me_BaseTypes::TUint_2;
+    me_BaseTypes::TUint_2,
+    me_BaseTypes::TMethod;
 
   /*
-    Method call
+    Delayed method call
 
-    Storage and execution class.
+    Store handler now, call it later.
 
     It's out of place here, just sketching.
   */
   class TMethodCall
   {
-    TUint_2 DataAddr;
-    TUint_2 MethodAddr;
+    TMethod Method;
+    TUint_2 State;
 
     public:
-      TMethodCall(): DataAddr(0), MethodAddr(0) {};
-      void Set(TUint_2 DataAddr, TUint_2 MethodAddr)
+      TMethodCall(): Method(0), State(0) {};
+      void Set(TMethod Method, TUint_2 State)
       {
-        this->DataAddr = DataAddr;
-        this->MethodAddr = MethodAddr;
+        this->Method = Method;
+        this->State = State;
       }
-      void Run()
+      void Run(TUint_2 Data = 0)
       {
-        if (DataAddr == 0) return;
-        typedef void (*TMethod) (TUint_2 DataAddr);
-        TMethod Method = (TMethod) MethodAddr;
-        Method(DataAddr);
+        Method(Data, State);
       }
   };
 
@@ -63,12 +61,13 @@ namespace me_MenuItem
 
     // Copy from our specie
     TBool Set(TMenuItem * Src);
-    // [debug] Print state
-    void PrintWrappings();
     // Run item handler
-    void Execute() { Method.Run(); };
+    void Execute();
     // Release memory of fields
     void Release();
+
+    // [debug] Print state
+    void PrintWrappings();
   };
 
   // Allocate mem for struc and clone from

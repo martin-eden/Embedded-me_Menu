@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-23
+  Last mod.: 2024-06-27
 */
 
 #include "MenuItem.h"
@@ -38,6 +38,14 @@ TBool TMenuItem::Set(TMenuItem * Src)
 
   return true;
 }
+
+/*
+  Run item's handler
+*/
+void TMenuItem::Execute()
+{
+  Method.Run();
+};
 
 /*
   Release fields memory
