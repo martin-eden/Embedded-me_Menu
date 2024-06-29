@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-27
+  Last mod.: 2024-06-29
 */
 
 #include <me_Menu.h>
@@ -150,17 +150,17 @@ void AddItems(me_Menu::TMenu * Menu)
 
   Item.Command.Set("g");
   Item.Description.Set("Print led state");
-  Item.Method.Set(PrintState_wrap, (TUint_2) &LedManager);
+  Item.Handler.Set(PrintState_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
   Item.Command.Set("c");
   Item.Description.Set("Set led LOW");
-  Item.Method.Set(SetLow_wrap, (TUint_2) &LedManager);
+  Item.Handler.Set(SetLow_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
   Item.Command.Set("t");
   Item.Description.Set("Set led HIGH");
-  Item.Method.Set(SetHigh_wrap, (TUint_2) &LedManager);
+  Item.Handler.Set(SetHigh_wrap, (TUint_2) &LedManager);
   Menu->Add(&Item);
 }
 
