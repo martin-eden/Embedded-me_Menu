@@ -2,12 +2,13 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-27
+  Last mod.: 2024-06-29
 */
 
 #pragma once
 
-#include <me_ManagedMemory.h>
+#include <me_ManagedMemory.h> // for .Command and .Description
+#include <me_StoredCall.h> // for .Handler
 #include <me_BaseTypes.h>
 
 #include <stdio.h>
@@ -16,48 +17,24 @@ namespace me_MenuItem
 {
   using
     me_ManagedMemory::TManagedMemory,
+    me_StoredCall::TStoredCall,
     me_BaseTypes::TBool,
     me_BaseTypes::TUint_2,
     me_BaseTypes::TMethod;
 
   /*
-    Delayed method call
-
-    Store handler now, call it later.
-
-    It's out of place here, just sketching.
-  */
-  class TMethodCall
-  {
-    TMethod Method;
-    TUint_2 State;
-
-    public:
-      TMethodCall(): Method(0), State(0) {};
-      void Set(TMethod Method, TUint_2 State)
-      {
-        this->Method = Method;
-        this->State = State;
-      }
-      void Run(TUint_2 Data = 0)
-      {
-        Method(Data, State);
-      }
-  };
-
-  /*
     Menu item
 
-    Two strings: command and description.
+    Two strings (command and description) and stored handler to call.
 
-    It _owns_ memory for these strings, so data is cloned by setters.
+    It _owns_ memory for strings, so data is cloned by setters.
     It releases memory upon death of course.
   */
   struct TMenuItem
   {
     TManagedMemory Command;
     TManagedMemory Description;
-    TMethodCall Method;
+    TStoredCall Handler;
 
     // Copy from our specie
     TBool Set(TMenuItem * Src);

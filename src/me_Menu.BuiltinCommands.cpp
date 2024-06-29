@@ -41,7 +41,7 @@ TBool TMenu::AddExitCommand()
 
   Item.Command.Set("^");
   Item.Description.Set("Exit");
-  Item.Method.Set(Release_wrap, (TUint_2) this);
+  Item.Handler.Set(Release_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
 
@@ -71,7 +71,7 @@ TBool TMenu::AddListCommand()
 
   Item.Command.Set("?");
   Item.Description.Set("List commands");
-  Item.Method.Set(Print_wrap, (TUint_2) this);
+  Item.Handler.Set(Print_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
 

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-27
+  Last mod.: 2024-06-29
 */
 
 #include "MenuItem.h"
@@ -10,7 +10,6 @@
 #include <stdio.h> // printf()
 
 #include <me_MemorySegment.h> // (Reserve/Release)()
-#include <me_BaseTypes.h>
 
 using
   me_MenuItem::TMenuItem,
@@ -34,7 +33,7 @@ TBool TMenuItem::Set(TMenuItem * Src)
     return false;
   }
 
-  Method = Src->Method;
+  Handler = Src->Handler;
 
   return true;
 }
@@ -44,7 +43,7 @@ TBool TMenuItem::Set(TMenuItem * Src)
 */
 void TMenuItem::Execute()
 {
-  Method.Run();
+  Handler.Run();
 };
 
 /*
