@@ -11,8 +11,6 @@
 #include <me_StoredCall.h> // for .Handler
 #include <me_BaseTypes.h>
 
-#include <stdio.h>
-
 namespace me_MenuItem
 {
   using
