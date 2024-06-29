@@ -2,10 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-21
+  Last mod.: 2024-06-29
 */
 
 #include "me_Menu.h"
+
+#include <stdio.h> // printf()
 
 #include <me_BaseTypes.h>
 
