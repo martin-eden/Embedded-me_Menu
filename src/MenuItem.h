@@ -18,9 +18,7 @@ namespace me_MenuItem
   using
     me_ManagedMemory::TManagedMemory,
     me_StoredCall::TStoredCall,
-    me_BaseTypes::TBool,
-    me_BaseTypes::TUint_2,
-    me_BaseTypes::TMethod;
+    me_BaseTypes::TBool;
 
   /*
     Menu item
