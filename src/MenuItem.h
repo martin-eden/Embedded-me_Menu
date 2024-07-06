@@ -2,13 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-29
+  Last mod.: 2024-07-06
 */
 
 #pragma once
 
 #include <me_ManagedMemory.h> // for .Command and .Description
 #include <me_StoredCall.h> // for .Handler
+#include <me_MemorySegment.h> // for .ItsMe() comparator
 #include <me_BaseTypes.h>
 
 namespace me_MenuItem
@@ -16,6 +17,7 @@ namespace me_MenuItem
   using
     me_ManagedMemory::TManagedMemory,
     me_StoredCall::TStoredCall,
+    me_MemorySegment::TMemorySegment,
     me_BaseTypes::TBool;
 
   /*
@@ -34,6 +36,8 @@ namespace me_MenuItem
 
     // Copy from our specie
     TBool Set(TMenuItem * Src);
+    // Matching with external data
+    TBool ItsMe(TMemorySegment Data);
     // Run item handler
     void Execute();
     // Release memory of fields
@@ -56,4 +60,5 @@ namespace me_MenuItem
   2024-06-04 Memory pwnage is delegated to TManagedMemory
   2024-06-07
   2024-06-16 TMenuItem.Method
+  2024-07-06 ItsMe()
 */

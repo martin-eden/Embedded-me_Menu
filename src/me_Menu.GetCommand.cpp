@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-21
+  Last mod.: 2024-07-06
 */
 
 #include "me_Menu.h"
@@ -46,7 +46,7 @@ void Match(
   TMenuItem * Item = (TMenuItem *) NodeData;
   TLookedAndFound * State = (TLookedAndFound *) HandlerData;
 
-  if (Item->Command.Get().IsEqualTo(State->LookingFor))
+  if (Item->ItsMe(State->LookingFor))
     State->ItemFound = Item;
 }
 

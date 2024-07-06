@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-29
+  Last mod.: 2024-07-06
 */
 
 #include "MenuItem.h"
@@ -36,6 +36,17 @@ TBool TMenuItem::Set(TMenuItem * Src)
   Handler = Src->Handler;
 
   return true;
+}
+
+/*
+  Check for equality
+
+  Current implementation is return true when our command is the same
+  as in external data.
+*/
+TBool TMenuItem::ItsMe(TMemorySegment Data)
+{
+  return Command.Get().IsEqualTo(Data);
 }
 
 /*
@@ -121,4 +132,5 @@ void me_MenuItem::KillItem(TMenuItem * Item)
   2024-06-02
   2024-06-15
   2024-06-23
+  2024-07-06
 */
