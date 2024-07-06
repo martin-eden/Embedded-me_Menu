@@ -84,7 +84,7 @@ TBool TMenu::GetCommand(TMenuItem * ItemSelected)
   // Part two: search by this string
   TLookedAndFound SearchState;
   {
-    SearchState.LookingFor = String.Get();
+    SearchState.LookingFor = String;
     SearchState.ItemFound = 0;
 
     List.Traverse(Match, (TUint_2) &SearchState);

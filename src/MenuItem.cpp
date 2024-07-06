@@ -23,8 +23,8 @@ using
 TBool TMenuItem::Set(TMenuItem * Src)
 {
   TBool IsFullyCopied =
-    (Command.Set(&Src->Command)) &&
-    (Description.Set(&Src->Description));
+    (Command.Set(Src->Command)) &&
+    (Description.Set(Src->Description));
 
   if (!IsFullyCopied)
   {
@@ -46,7 +46,7 @@ TBool TMenuItem::Set(TMenuItem * Src)
 */
 TBool TMenuItem::ItsMe(TMemorySegment Data)
 {
-  return Command.Get().IsEqualTo(Data);
+  return Command.IsEqualTo(Data);
 }
 
 /*
