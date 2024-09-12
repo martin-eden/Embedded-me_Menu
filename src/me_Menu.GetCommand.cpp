@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-07-06
+  Last mod.: 2024-09-12
 */
 
 #include "me_Menu.h"
@@ -16,10 +16,7 @@ using
   me_Menu::TMenu,
   me_Menu::TMenuItem,
   me_MemorySegment::TMemorySegment,
-  me_ManagedMemory::TManagedMemory,
-  me_BaseTypes::TBool,
-  me_BaseTypes::TUint_2,
-  me_BaseTypes::TChar;
+  me_ManagedMemory::TManagedMemory;
 
 /*
   Structure to hold state of search in list

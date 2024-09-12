@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-29
+  Last mod.: 2024-09-12
 */
 
 #include "me_Menu.h"
@@ -13,8 +13,7 @@
 
 using
   me_Menu::TMenu,
-  me_Menu::TMenuItem,
-  me_BaseTypes::TUint_2;
+  me_Menu::TMenuItem;
 
 /*
   List handler: print item
