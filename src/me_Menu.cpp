@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-21
+  Last mod.: 2024-09-12
 */
 
 #include "me_Menu.h"
@@ -10,9 +10,7 @@
 #include <me_BaseTypes.h>
 
 using
-  me_Menu::TMenu,
-  me_BaseTypes::TBool,
-  me_BaseTypes::TUint_2;
+  me_Menu::TMenu;
 
 /*
   Release memory at death

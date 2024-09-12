@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-07-06
+  Last mod.: 2024-09-12
 */
 
 #pragma once
@@ -17,8 +17,7 @@ namespace me_MenuItem
   using
     me_ManagedMemory::TManagedMemory,
     me_StoredCall::TStoredCall,
-    me_MemorySegment::TMemorySegment,
-    me_BaseTypes::TBool;
+    me_MemorySegment::TMemorySegment;
 
   /*
     Menu item

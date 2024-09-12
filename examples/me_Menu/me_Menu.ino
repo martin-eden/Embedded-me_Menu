@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-29
+  Last mod.: 2024-09-12
 */
 
 #include <me_Menu.h>
@@ -10,10 +10,6 @@
 #include <me_UartSpeeds.h>
 #include <me_InstallStandardStreams.h>
 #include <me_BaseTypes.h>
-
-using
-  me_BaseTypes::TUint_1,
-  me_BaseTypes::TUint_2;
 
 void setup()
 {

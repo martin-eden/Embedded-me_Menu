@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-07-06
+  Last mod.: 2024-09-12
 */
 
 #include "MenuItem.h"
@@ -13,9 +13,7 @@
 
 using
   me_MenuItem::TMenuItem,
-  me_MemorySegment::TMemorySegment,
-  me_BaseTypes::TUint_2,
-  me_BaseTypes::TBool;
+  me_MemorySegment::TMemorySegment;
 
 /*
   Copy data from our specie

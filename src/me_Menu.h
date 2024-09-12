@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-06-21
+  Last mod.: 2024-09-12
 */
 
 #pragma once
@@ -16,7 +16,6 @@ namespace me_Menu
 {
   using
     me_List::TQueue,
-    me_BaseTypes::TBool,
     me_MenuItem::TMenuItem;
 
   class TMenu
