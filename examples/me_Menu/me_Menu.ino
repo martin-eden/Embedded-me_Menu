@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-05
 */
 
 #include <me_Menu.h>
@@ -10,6 +10,9 @@
 #include <me_UartSpeeds.h>
 #include <me_InstallStandardStreams.h>
 #include <me_BaseTypes.h>
+
+// Forwards:
+class TBuiltinLed;
 
 void setup()
 {
@@ -41,7 +44,8 @@ void loop()
 
     g - (g)et - PrintState() - Print led state
     c - (c)lear - SetLow() - Set led LOW
-    t - se(t) - SetHigh() - Set led HIGH
+    s - (s)et - SetHigh() - Set led HIGH
+    t - (t)oggle - Toggle() - Toggle state
 
   Commands are strings, they don't need to be one character.
 
@@ -50,13 +54,16 @@ void loop()
 */
 class TBuiltinLed
 {
-  TUint_1 State = 0; // 0 - unknown, 1 - LOW, 2 - HIGH
+  private:
+    TUint_1 State = 0; // 0 - unknown, 1 - LOW, 2 - HIGH
 
   public:
     TBuiltinLed() { pinMode(LED_BUILTIN, OUTPUT); };
     void PrintState();
+    void ApplyState();
     void SetLow();
     void SetHigh();
+    void Toggle();
 };
 
 void TBuiltinLed::PrintState()
@@ -75,20 +82,40 @@ void TBuiltinLed::PrintState()
   printf(")\n");
 }
 
+void TBuiltinLed::ApplyState()
+{
+  if (State == 1)
+    digitalWrite(LED_BUILTIN, LOW);
+  if (State == 2)
+    digitalWrite(LED_BUILTIN, HIGH);
+}
+
 void TBuiltinLed::SetLow()
 {
-  digitalWrite(LED_BUILTIN, LOW);
   State = 1;
+  ApplyState();
 }
 
 void TBuiltinLed::SetHigh()
 {
-  digitalWrite(LED_BUILTIN, HIGH);
   State = 2;
+  ApplyState();
 }
 
+void TBuiltinLed::Toggle()
+{
+  // We can do fancy modular arithmetic here. But we won't
+  if (State == 1)
+    State = 2;
+  else
+    State = 1;
+  ApplyState();
+}
+
+// --
+
 /*
-  Ugly wrappers for class methods
+  Wrappers for class methods
 
   Because I did not find a way to get pointer to member function.
 
@@ -98,65 +125,79 @@ void TBuiltinLed::SetHigh()
     ~~~~~~~ ~~~~ ~~~~~~~~
       ui2    ui2   ui2
 
-  approach to call function with data and upvalues.
+  approach to call function with data and pointer to state.
 
-  In this case, we have nothing for "data" and "upvalues" are
-  address of class instance.
+  In this case we have nothing for "data". Menu does not use it.
 */
-void PrintState_wrap(
+void PrintState_Handler(
   TUint_2 Data __attribute__((unused)),
-  TUint_2 State
+  TUint_2 Instance
 )
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) State;
+  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
   LedManager->PrintState();
 }
 
-void SetLow_wrap(
+void SetLow_Handler(
   TUint_2 Data __attribute__((unused)),
-  TUint_2 State
+  TUint_2 Instance
 )
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) State;
+  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
   LedManager->SetLow();
 }
 
-void SetHigh_wrap(
+void SetHigh_Handler(
   TUint_2 Data __attribute__((unused)),
-  TUint_2 State
+  TUint_2 Instance
 )
 {
-  TBuiltinLed * LedManager = (TBuiltinLed *) State;
+  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
   LedManager->SetHigh();
+}
+
+void Toggle_Handler(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 Instance
+)
+{
+  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
+  LedManager->Toggle();
 }
 
 // --
 
-TBuiltinLed LedManager;
-
 /*
   Populate menu
 
-  When wiring item handlers we need to see class instance,
-  <LedManager> in this case.
+  When wiring item handlers we need class instance,
+  <TBuiltinLed> in this case.
 */
-void AddItems(me_Menu::TMenu * Menu)
+void AddItems(
+  me_Menu::TMenu * Menu,
+  TBuiltinLed * LedManager
+)
 {
   me_Menu::TMenuItem Item;
 
-  Item.Command.Set("g");
-  Item.Description.Set("Print led state");
-  Item.Handler.Set(PrintState_wrap, (TUint_2) &LedManager);
+  Item.Command.LoadFrom("g");
+  Item.Description.LoadFrom("Print led state");
+  Item.Handler.Set(PrintState_Handler, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
-  Item.Command.Set("c");
-  Item.Description.Set("Set led LOW");
-  Item.Handler.Set(SetLow_wrap, (TUint_2) &LedManager);
+  Item.Command.LoadFrom("c");
+  Item.Description.LoadFrom("Set led LOW");
+  Item.Handler.Set(SetLow_Handler, (TUint_2) &LedManager);
   Menu->Add(&Item);
 
-  Item.Command.Set("t");
-  Item.Description.Set("Set led HIGH");
-  Item.Handler.Set(SetHigh_wrap, (TUint_2) &LedManager);
+  Item.Command.LoadFrom("s");
+  Item.Description.LoadFrom("Set led HIGH");
+  Item.Handler.Set(SetHigh_Handler, (TUint_2) &LedManager);
+  Menu->Add(&Item);
+
+  Item.Command.LoadFrom("t");
+  Item.Description.LoadFrom("Toggle led");
+  Item.Handler.Set(Toggle_Handler, (TUint_2) &LedManager);
   Menu->Add(&Item);
 }
 
@@ -168,8 +209,10 @@ void AddItems(me_Menu::TMenu * Menu)
 void Test()
 {
   me_Menu::TMenu Menu;
+  TBuiltinLed LedManager;
 
-  AddItems(&Menu);
+  AddItems(&Menu, &LedManager);
+
   Menu.AddBuiltinCommands();
   Menu.Print();
   Menu.Run();
@@ -185,4 +228,5 @@ void Test()
   2024-06-16
   2024-06-20
   2024-06-27
+  2024-10-05
 */
