@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-05
 */
 
 #include "me_Menu.h"
@@ -10,10 +10,12 @@
 #include <stdio.h> // printf()
 
 #include <me_BaseTypes.h>
+#include <me_MemorySegment.h> // for me_MemorySegment::Freetown::Print
 
 using
   me_Menu::TMenu,
-  me_Menu::TMenuItem;
+  me_Menu::TMenuItem,
+  me_MemorySegment::Freetown::Print;
 
 /*
   List handler: print item
@@ -25,9 +27,9 @@ void PrintListNode(
 {
   TMenuItem * Item = (TMenuItem *) Data;
 
-  Item->Command.Print();
+  Print(Item->Command.GetData());
   printf(" - ");
-  Item->Description.Print();
+  Print(Item->Description.GetData());
   printf("\n");
 }
 
@@ -43,4 +45,5 @@ void TMenu::Print()
 
 /*
   2024-06-21 Spliced to standalone file
+  2024-10-05
 */

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-05
 */
 
 #include "me_Menu.h"
@@ -11,7 +11,9 @@
 
 using
   me_Menu::TMenu,
-  me_Menu::TMenuItem;
+  me_Menu::TMenuItem,
+  me_MenuItem::Freetown::SpawnItem,
+  me_MenuItem::Freetown::KillItem;
 
 /*
   Add menu item to menu
@@ -54,4 +56,5 @@ void TMenu::Release()
 
 /*
   2024-06-21 Spliced to standalone file
+  2024-10-05 Freetown
 */

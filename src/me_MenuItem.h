@@ -42,14 +42,18 @@ namespace me_MenuItem
     // Release memory of fields
     void Release();
 
-    // [debug] Print state
+    // [Debug] Print state
     void PrintWrappings();
   };
 
-  // Allocate mem for struc and clone from
-  TBool SpawnItem(TMenuItem * * Item, TMenuItem * Value);
-  // Release derived memory and struc
-  void KillItem(TMenuItem * Item);
+  namespace Freetown
+  {
+    // Allocate mem for struc and clone from
+    TBool SpawnItem(TMenuItem * * Item, TMenuItem * Value);
+
+    // Release derived memory and struc
+    void KillItem(TMenuItem * Item);
+  }
 }
 
 /*

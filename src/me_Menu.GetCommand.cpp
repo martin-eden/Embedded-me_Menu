@@ -23,7 +23,7 @@ using
 
   Implementation-specific detail.
 */
-struct TLookedAndFound
+struct TSearchAndResult
 {
   TMemorySegment LookingFor;
   TMenuItem * ItemFound;
@@ -35,13 +35,13 @@ struct TLookedAndFound
   We are matching string in <State.LookingFor> to <.Command> in one of
   our items.
 */
-void Match(
+void OnListVisit(
   TUint_2 NodeData,
   TUint_2 HandlerData
 )
 {
   TMenuItem * Item = (TMenuItem *) NodeData;
-  TLookedAndFound * State = (TLookedAndFound *) HandlerData;
+  TSearchAndResult * State = (TSearchAndResult *) HandlerData;
 
   if (Item->ItsMe(State->LookingFor))
     State->ItemFound = Item;
@@ -75,16 +75,16 @@ TBool TMenu::GetCommand(TMenuItem * ItemSelected)
       return false;
     }
 
-    String.Set(Entity.Segment);
+    String.LoadFrom(Entity.Segment);
   }
 
   // Part two: search by this string
-  TLookedAndFound SearchState;
+  TSearchAndResult SearchState;
   {
-    SearchState.LookingFor = String;
+    SearchState.LookingFor = String.GetData();
     SearchState.ItemFound = 0;
 
-    List.Traverse(Match, (TUint_2) &SearchState);
+    List.Traverse(OnListVisit, (TUint_2) &SearchState);
   }
 
   // Part three: fulfill contract

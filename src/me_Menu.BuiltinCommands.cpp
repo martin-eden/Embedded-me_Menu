@@ -37,8 +37,8 @@ TBool TMenu::AddExitCommand()
 {
   TMenuItem Item;
 
-  Item.Command.Set("^");
-  Item.Description.Set("Exit");
+  Item.Command.LoadFrom("^");
+  Item.Description.LoadFrom("Exit");
   Item.Handler.Set(Release_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
@@ -67,8 +67,8 @@ TBool TMenu::AddListCommand()
 {
   TMenuItem Item;
 
-  Item.Command.Set("?");
-  Item.Description.Set("List commands");
+  Item.Command.LoadFrom("?");
+  Item.Description.LoadFrom("List commands");
   Item.Handler.Set(Print_wrap, (TUint_2) this);
   if (!Add(&Item))
     return false;
