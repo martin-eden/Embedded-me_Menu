@@ -16,23 +16,37 @@ Then call "Run()" and it will handle input and call your handlers.
 
 ## Example interaction
 
+Sorry for empty lines, but that's the current state. I'll fix them
+someday.
+
 ```
 [me_Menu] We are here.
+
 --
-g - Print last value written
-c - Set led LOW
-t - Set led HIGH
-? - List commands
-^ - Exit
+  g - Print led state
+  c - Set led LOW
+  s - Set led HIGH
+  t - Toggle led
+  ? - List commands
+  ^ - Exit
 ==
-g
-State(unknown)
-t g
-State(HIGH)
-c g
+g t g
+State(?)
+
+
 State(LOW)
-^
+
+g t g
+State(LOW)
+
+
+State(HIGH)
+
+c ^
+
+
 [me_Menu] Done.
+
 ```
 
 ## Requirements
