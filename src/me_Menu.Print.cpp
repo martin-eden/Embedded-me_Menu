@@ -2,20 +2,13 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-05
+  Last mod.: 2024-10-10
 */
 
 #include "me_Menu.h"
 
-#include <stdio.h> // printf()
-
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h> // for me_MemorySegment::Freetown::Print
-
-using
-  me_Menu::TMenu,
-  me_Menu::TMenuItem,
-  me_MemorySegment::Freetown::Print;
+#include <me_Console.h>
 
 /*
   List handler: print item
@@ -25,22 +18,26 @@ void PrintListNode(
   TUint_2 HandlerData __attribute__((unused))
 )
 {
+  using me_Menu::TMenuItem;
   TMenuItem * Item = (TMenuItem *) Data;
 
-  Print(Item->Command.GetData());
-  printf(" - ");
-  Print(Item->Description.GetData());
-  printf("\n");
+  Console.Write(Item->Command.GetData());
+  Console.Write(" - ");
+  Console.Write(Item->Description.GetData());
+  Console.EndLine();
 }
 
 /*
   Print menu
 */
-void TMenu::Print()
+void me_Menu::TMenu::Print()
 {
-  printf("--\n");
+  Console.Print("--");
+  Console.Indent();
   List.Traverse(PrintListNode);
-  printf("==\n");
+  Console.Unindent();
+  Console.Print("==");
+  Console.Flush();
 }
 
 /*
