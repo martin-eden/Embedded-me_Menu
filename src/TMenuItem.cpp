@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-05
+  Last mod.: 2024-10-10
 */
 
 #include "me_MenuItem.h"
@@ -76,16 +76,18 @@ void TMenuItem::Execute()
 */
 void TMenuItem::PrintWrappings()
 {
+  using me_MemorySegment::Freetown::PrintWrappings;
+
   printf("[TMenuItem 0x%04X]", (TUint_2) this);
   printf(" ");
   printf("(\n");
 
   printf("  Command ");
-  Command.PrintWrappings();
+  PrintWrappings(Command.GetData());
   printf("\n");
 
   printf("  Description ");
-  Description.PrintWrappings();
+  PrintWrappings(Description.GetData());
   printf("\n");
 
   printf(")\n");
