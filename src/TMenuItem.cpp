@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-11
+  Last mod.: 2024-10-12
 */
 
 #include "me_MenuItem.h"
@@ -10,7 +10,6 @@
 #include <stdio.h> // printf() for PrintWrappings()
 
 #include <me_MemorySegment.h>
-#include <me_Console.h>
 
 using
   me_MenuItem::TMenuItem,
@@ -69,14 +68,6 @@ TBool TMenuItem::ItsMe(
 void TMenuItem::Execute()
 {
   Handler.Run();
-
-  /*
-    If handler's code is using [me_Console] for output
-    there will be pending delimiter for last item.
-    Here we're making sure we're on new line.
-  */
-  Console.EndLine();
-  Console.Flush();
 };
 
 /*
