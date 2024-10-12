@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-12
 */
 
 #include "me_Menu.h"
@@ -18,20 +18,6 @@ using
 TMenu::~TMenu()
 {
   Release();
-}
-
-/*
-  Add internal commands: list and exit
-*/
-TBool TMenu::AddBuiltinCommands()
-{
-  if (!AddListCommand())
-    return false;
-
-  if (!AddExitCommand())
-    return false;
-
-  return true;
 }
 
 /*

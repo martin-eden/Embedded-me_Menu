@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-05
+  Last mod.: 2024-10-12
 */
 
 #include "me_Menu.h"
@@ -11,23 +11,25 @@
 
 using
   me_Menu::TMenu,
-  me_Menu::TMenuItem,
-  me_MenuItem::Freetown::SpawnItem,
-  me_MenuItem::Freetown::KillItem;
+  me_Menu::TMenuItem;
 
 /*
   Add menu item to menu
 */
-TBool TMenu::Add(TMenuItem * OuterMenuItem)
+TBool TMenu::Add(
+  TMenuItem * OuterMenuItem
+)
 {
   TMenuItem * Item;
 
-  if (!SpawnItem(&Item, OuterMenuItem))
+  // Create our copy in dynamic memory
+  if (!me_MenuItem::Freetown::SpawnItem(&Item, OuterMenuItem))
     return false;
 
+  // Add our copy to menu list
   if (!List.Add((TUint_2) Item))
   {
-    KillItem(Item);
+    me_MenuItem::Freetown::KillItem(Item);
     return false;
   }
 
@@ -42,7 +44,7 @@ void KillItem_Handler(
   TUint_2 HandlerData __attribute__((unused))
 )
 {
-  KillItem((TMenuItem *) Data);
+  me_MenuItem::Freetown::KillItem((TMenuItem *) Data);
 }
 
 /*
