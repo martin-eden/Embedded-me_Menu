@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-10
+  Last mod.: 2024-10-13
 */
 
 #include "me_Menu.h"
@@ -37,7 +37,6 @@ void me_Menu::TMenu::Print()
   List.Traverse(PrintListNode);
   Console.Unindent();
   Console.Print("==");
-  Console.Flush();
 }
 
 /*
