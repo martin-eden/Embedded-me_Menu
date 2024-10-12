@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-12
 */
 
 #include "me_Menu.h"
@@ -14,47 +14,15 @@ using
   me_Menu::TMenuItem;
 
 /*
-  Release() wrapper for builtin command
-
-  Release() will empty list and empty list is exit condition
-  in Run() loop.
+  List command caller
 */
-void Release_wrap(
+void ListCommand_Handler(
   TUint_2 Data __attribute__((unused)),
   TUint_2 State
 )
 {
   TMenu * Menu = (TMenu *) State;
-  Menu->Release();
-}
 
-/*
-  Add exit command
-
-    ^ - exit from Run() cycle
-*/
-TBool TMenu::AddExitCommand()
-{
-  TMenuItem Item;
-
-  Item.Command.LoadFrom("^");
-  Item.Description.LoadFrom("Exit");
-  Item.Handler.Set(Release_wrap, (TUint_2) this);
-  if (!Add(&Item))
-    return false;
-
-  return true;
-}
-
-/*
-  Print() wrapper for built-in command
-*/
-void Print_wrap(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 State
-)
-{
-  TMenu * Menu = (TMenu *) State;
   Menu->Print();
 }
 
@@ -69,7 +37,43 @@ TBool TMenu::AddListCommand()
 
   Item.Command.LoadFrom("?");
   Item.Description.LoadFrom("List commands");
-  Item.Handler.Set(Print_wrap, (TUint_2) this);
+  Item.Handler.Set(ListCommand_Handler, (TUint_2) this);
+
+  if (!Add(&Item))
+    return false;
+
+  return true;
+}
+
+/*
+  Exit command implementation
+
+  Menu.Release() will empty list. And empty list is exit condition
+  in Menu.Run() loop.
+*/
+void ExitCommand_Handler(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 State
+)
+{
+  TMenu * Menu = (TMenu *) State;
+
+  Menu->Release();
+}
+
+/*
+  Add exit command
+
+    ^ - exit from Run() cycle
+*/
+TBool TMenu::AddExitCommand()
+{
+  TMenuItem Item;
+
+  Item.Command.LoadFrom("^");
+  Item.Description.LoadFrom("Exit");
+  Item.Handler.Set(ExitCommand_Handler, (TUint_2) this);
+
   if (!Add(&Item))
     return false;
 
