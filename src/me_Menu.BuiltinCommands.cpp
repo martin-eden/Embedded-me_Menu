@@ -81,5 +81,30 @@ TBool TMenu::AddExitCommand()
 }
 
 /*
+  Add internal commands: list and exit
+*/
+TBool TMenu::AddBuiltinCommands()
+{
+  /* [To do]
+
+    Implement generic "AddCommand".
+
+    Example usage:
+
+      if (!AddCommand("^", "Exit", ExitCommand_Handler, this))
+        return false;
+      if (!AddCommand("?", "List", ListCommand_Handler, this))
+        return false;
+  */
+  if (!AddListCommand())
+    return false;
+
+  if (!AddExitCommand())
+    return false;
+
+  return true;
+}
+
+/*
   2024-06-21 Spliced to standalone file
 */
