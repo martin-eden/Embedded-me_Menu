@@ -27,8 +27,10 @@ TBool TMenu::AddBuiltinCommands()
 {
   if (!AddListCommand())
     return false;
+
   if (!AddExitCommand())
     return false;
+
   return true;
 }
 
