@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-09-12
+  Last mod.: 2024-10-14
 */
 
 #include "me_Menu.h"
@@ -48,10 +48,10 @@ void OnListVisit(
 }
 
 /*
-  Get command from serial and match it to our list
+  Consume one entity from serial and match it with our list of commands
 
-  If we found menu item in our list with same <.Command>, copy
-  that menu item to provided argument. Yes, we are returning a copy.
+  If we found menu item with same <.Command>, we'll return copy of
+  menu item.
 */
 TBool TMenu::GetCommand(TMenuItem * ItemSelected)
 {
