@@ -2,26 +2,24 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-12
+  Last mod.: 2024-10-18
 */
 
 #include "me_Menu.h"
 
 #include <me_BaseTypes.h>
 
-using
-  me_Menu::TMenu,
-  me_Menu::TMenuItem;
+using namespace me_Menu;
 
 /*
   List command caller
 */
 void ListCommand_Handler(
   TUint_2 Data __attribute__((unused)),
-  TUint_2 State
+  TUint_2 Instance
 )
 {
-  TMenu * Menu = (TMenu *) State;
+  TMenu * Menu = (TMenu *) Instance;
 
   Menu->Print();
 }
@@ -33,16 +31,10 @@ void ListCommand_Handler(
 */
 TBool TMenu::AddListCommand()
 {
-  TMenuItem Item;
+  using
+    Freetown::ToItem;
 
-  Item.Command.LoadFrom("?");
-  Item.Description.LoadFrom("List commands");
-  Item.Handler.Set(ListCommand_Handler, (TUint_2) this);
-
-  if (!Add(&Item))
-    return false;
-
-  return true;
+  return AddItem(ToItem("?", "List commands", ListCommand_Handler, (TUint_2) this));
 }
 
 /*
@@ -53,10 +45,10 @@ TBool TMenu::AddListCommand()
 */
 void ExitCommand_Handler(
   TUint_2 Data __attribute__((unused)),
-  TUint_2 State
+  TUint_2 Instance
 )
 {
-  TMenu * Menu = (TMenu *) State;
+  TMenu * Menu = (TMenu *) Instance;
 
   Menu->Release();
 }
@@ -68,16 +60,10 @@ void ExitCommand_Handler(
 */
 TBool TMenu::AddExitCommand()
 {
-  TMenuItem Item;
+  using
+    Freetown::ToItem;
 
-  Item.Command.LoadFrom("^");
-  Item.Description.LoadFrom("Exit");
-  Item.Handler.Set(ExitCommand_Handler, (TUint_2) this);
-
-  if (!Add(&Item))
-    return false;
-
-  return true;
+  return AddItem(ToItem("^", "Exit", ExitCommand_Handler, (TUint_2) this));
 }
 
 /*
@@ -85,26 +71,10 @@ TBool TMenu::AddExitCommand()
 */
 TBool TMenu::AddBuiltinCommands()
 {
-  /* [To do]
-
-    Implement generic "AddCommand".
-
-    Example usage:
-
-      if (!AddCommand("^", "Exit", ExitCommand_Handler, this))
-        return false;
-      if (!AddCommand("?", "List", ListCommand_Handler, this))
-        return false;
-  */
-  if (!AddListCommand())
-    return false;
-
-  if (!AddExitCommand())
-    return false;
-
-  return true;
+  return (AddListCommand() && AddExitCommand());
 }
 
 /*
   2024-06-21 Spliced to standalone file
+  2024-10-18
 */

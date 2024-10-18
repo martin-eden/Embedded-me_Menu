@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-05
+  Last mod.: 2024-10-18
 */
 
 #include <me_Menu.h>
@@ -10,6 +10,8 @@
 #include <me_UartSpeeds.h>
 #include <me_InstallStandardStreams.h>
 #include <me_BaseTypes.h>
+#include <me_MemorySegment.h>
+#include <me_StoredCall.h>
 
 // Forwards:
 class TBuiltinLed;
@@ -178,27 +180,15 @@ void AddItems(
   TBuiltinLed * LedManager
 )
 {
-  me_Menu::TMenuItem Item;
+  using
+    me_Menu::Freetown::ToItem;
 
-  Item.Command.LoadFrom("g");
-  Item.Description.LoadFrom("Print led state");
-  Item.Handler.Set(PrintState_Handler, (TUint_2) &LedManager);
-  Menu->Add(&Item);
+  TUint_2 InstanceAddr = (TUint_2) &LedManager;
 
-  Item.Command.LoadFrom("c");
-  Item.Description.LoadFrom("Set led LOW");
-  Item.Handler.Set(SetLow_Handler, (TUint_2) &LedManager);
-  Menu->Add(&Item);
-
-  Item.Command.LoadFrom("s");
-  Item.Description.LoadFrom("Set led HIGH");
-  Item.Handler.Set(SetHigh_Handler, (TUint_2) &LedManager);
-  Menu->Add(&Item);
-
-  Item.Command.LoadFrom("t");
-  Item.Description.LoadFrom("Toggle led");
-  Item.Handler.Set(Toggle_Handler, (TUint_2) &LedManager);
-  Menu->Add(&Item);
+  Menu->AddItem(ToItem("g", "Print led state", PrintState_Handler, InstanceAddr));
+  Menu->AddItem(ToItem("c", "Set led LOW", SetLow_Handler, InstanceAddr));
+  Menu->AddItem(ToItem("s", "Set led HIGH", SetHigh_Handler, InstanceAddr));
+  Menu->AddItem(ToItem("t", "Toggle led", Toggle_Handler, InstanceAddr));
 }
 
 // --
@@ -219,14 +209,8 @@ void Test()
 }
 
 /*
-  2024-05-25
-  2024-05-29
-  2024-05-30
-  2024-06-01
-  2024-06-02
-  2024-06-04
-  2024-06-16
-  2024-06-20
-  2024-06-27
+  2024-05 3
+  2024-06 6
   2024-10-05
+  2024-10-18
 */
