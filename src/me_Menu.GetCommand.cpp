@@ -2,28 +2,26 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-14
+  Last mod.: 2024-10-18
 */
 
 #include "me_Menu.h"
 
-#include <me_MemorySegment.h> // (Reserve/Release)Chunk()
-#include <me_ManagedMemory.h> // more modern way of managing memseg
-#include <me_SerialTokenizer.h> // GetEntity()
 #include <me_BaseTypes.h>
+#include <me_MemorySegment.h> // Freetown::FromAddrSize()
+#include <me_SerialTokenizer.h> // GetEntity()
+
+using namespace me_Menu;
 
 using
-  me_Menu::TMenu,
-  me_Menu::TMenuItem,
-  me_MemorySegment::TMemorySegment,
-  me_ManagedMemory::TManagedMemory;
+  me_MemorySegment::TMemorySegment;
 
 /*
-  Structure to hold state of search in list
+  Structure to hold search criteria and result
 
   Implementation-specific detail.
 */
-struct TSearchAndResult
+struct TSearchAndCatch
 {
   TMemorySegment LookingFor;
   TMenuItem * ItemFound;
@@ -32,8 +30,7 @@ struct TSearchAndResult
 /*
   List handler: find entity
 
-  We are matching string in <State.LookingFor> to <.Command> in one of
-  our items.
+  If item says "It's me!", that's it.
 */
 void OnListVisit(
   TUint_2 NodeData,
@@ -41,7 +38,7 @@ void OnListVisit(
 )
 {
   TMenuItem * Item = (TMenuItem *) NodeData;
-  TSearchAndResult * State = (TSearchAndResult *) HandlerData;
+  TSearchAndCatch * State = (TSearchAndCatch *) HandlerData;
 
   if (Item->ItsMe(State->LookingFor))
     State->ItemFound = Item;
@@ -49,39 +46,42 @@ void OnListVisit(
 
 /*
   Consume one entity from serial and match it with our list of commands
-
-  If we found menu item with same <.Command>, we'll return copy of
-  menu item.
 */
-TBool TMenu::GetCommand(TMenuItem * ItemSelected)
+TBool TMenu::GetCommand(
+  TMenuItem * ItemSelected
+)
 {
-  // Part one: get string
-  TManagedMemory String;
+  using
+    me_SerialTokenizer::TCapturedEntity,
+    me_MemorySegment::Freetown::FromAddrSize;
+
+  /*
+    Part one: get string
+
+    String will be pointed by <TCapturedEntity.Segment>.
+    That segment will be inside of our buffer segment.
+  */
+  TCapturedEntity Entity;
+
+  const TUint_2 BuffSize = 32;
+  TUint_1 Buff[BuffSize];
   {
-    const TUint_2 InputBufferSize = 32;
-    TChar Buffer[InputBufferSize];
+    TMemorySegment BuffSeg =
+      FromAddrSize((TUint_2) &Buff, BuffSize);
 
-    TMemorySegment BufferMem;
-    BufferMem.Start.Addr = (TUint_2) &Buffer;
-    BufferMem.Size = sizeof(Buffer);
-
-    me_SerialTokenizer::TCapturedEntity Entity;
-
-    me_SerialTokenizer::WaitEntity(&Entity, BufferMem);
+    me_SerialTokenizer::WaitEntity(&Entity, BuffSeg);
 
     if (Entity.IsTrimmed)
     {
       // Entity was too long for our input buffer
       return false;
     }
-
-    String.LoadFrom(Entity.Segment);
   }
 
   // Part two: search by this string
-  TSearchAndResult SearchState;
+  TSearchAndCatch SearchState;
   {
-    SearchState.LookingFor = String.GetData();
+    SearchState.LookingFor = Entity.Segment;
     SearchState.ItemFound = 0;
 
     List.Traverse(OnListVisit, (TUint_2) &SearchState);
@@ -91,7 +91,8 @@ TBool TMenu::GetCommand(TMenuItem * ItemSelected)
   {
     if (SearchState.ItemFound != 0)
     {
-      ItemSelected->Set(SearchState.ItemFound);
+      *ItemSelected = *SearchState.ItemFound;
+
       return true;
     }
     return false;
@@ -100,4 +101,5 @@ TBool TMenu::GetCommand(TMenuItem * ItemSelected)
 
 /*
   2024-06-21 Spliced to standalone file
+  2024-10-18
 */

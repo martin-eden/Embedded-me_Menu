@@ -2,10 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-13
+  Last mod.: 2024-10-18
 */
 
 #include "me_Menu.h"
+
+using namespace me_Menu;
 
 #include <me_BaseTypes.h>
 #include <me_Console.h>
@@ -21,9 +23,9 @@ void PrintListNode(
   using me_Menu::TMenuItem;
   TMenuItem * Item = (TMenuItem *) Data;
 
-  Console.Write(Item->Command.GetData());
+  Console.Write(Item->Command);
   Console.Write(" - ");
-  Console.Write(Item->Description.GetData());
+  Console.Write(Item->Description);
   Console.EndLine();
 }
 
@@ -42,4 +44,5 @@ void me_Menu::TMenu::Print()
 /*
   2024-06-21 Spliced to standalone file
   2024-10-05
+  2024-10-18
 */
