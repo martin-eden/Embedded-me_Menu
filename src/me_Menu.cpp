@@ -13,8 +13,6 @@
 #include <me_List.h>
 #include <me_Console.h> // for PrintWrappings()
 
-#include <Arduino.h> // [Debug] millis()
-
 using namespace me_Menu;
 
 using
@@ -151,10 +149,7 @@ TBool TMenuItem::ItsMe(
 */
 void TMenuItem::Execute()
 {
-  // static TUint_4 LastCommandTimestamp_Ms = millis();
-  // printf_P(PSTR("[%u] ms\n"), millis() - LastCommandTimestamp_Ms);
   Handler.Run();
-  // LastCommandTimestamp_Ms = millis();
 };
 
 // ) Menu item
