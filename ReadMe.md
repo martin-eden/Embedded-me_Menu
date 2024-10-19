@@ -14,6 +14,44 @@ Each item is command, description and handler.
 
 Then call "Run()" and it will handle input and call your handlers.
 
+
+## Adding commands
+
+That's adapted excerpt from [example][Example] showing how to add items
+to menu. `g`, `c`, `s`, `t` are menu items commands. When code gets one
+of them from UART, it executes item handler.
+
+In our case `PrintState_Handler` calls object method to print LED state
+to UART.
+
+```C++
+#include <me_Menu.h>
+// ...
+void PrintState_Handler(
+  TUint_2 Data __attribute__((unused)),
+  TUint_2 Instance
+)
+{
+  TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
+  LedManager->PrintState();
+}
+// ...
+me_Menu::TMenu Menu;
+TBuiltinLed LedManager;
+// ...
+using
+  me_Menu::Freetown::ToItem;
+
+TUint_2 InstanceAddr = (TUint_2) &LedManager;
+
+Menu.AddItem(ToItem("g", "Print led state", PrintState_Handler, InstanceAddr));
+Menu.AddItem(ToItem("c", "Set led LOW", SetLow_Handler, InstanceAddr));
+Menu.AddItem(ToItem("s", "Set led HIGH", SetHigh_Handler, InstanceAddr));
+Menu.AddItem(ToItem("t", "Toggle led", Toggle_Handler, InstanceAddr));
+// ...
+Menu.Run();
+```
+
 ## Example interaction
 
 ```
@@ -62,7 +100,7 @@ arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-prop
 
 # Code
 
-* [Example](examples/me_Menu/me_Menu.ino)
+* [Example](Example)
 * [Interface](src/me_Menu.h)
 * [Implementation](src/me_Menu.cpp)
 
@@ -70,3 +108,5 @@ arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-prop
 # See also
 
 * [My other repositories](https://github.com/martin-eden/contents)
+
+[Example]: examples/me_Menu/me_Menu.ino
