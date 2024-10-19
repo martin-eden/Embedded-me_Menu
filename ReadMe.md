@@ -1,6 +1,6 @@
 # What
 
-(2024-05 .. 2024-06)
+(2024-05/2024-06, 2024-10)
 
 Text menu and handler for commands. Arduino library.
 
@@ -16,12 +16,8 @@ Then call "Run()" and it will handle input and call your handlers.
 
 ## Example interaction
 
-Sorry for empty lines, but that's the current state. I'll fix them
-someday.
-
 ```
 [me_Menu] We are here.
-
 --
   g - Print led state
   c - Set led LOW
@@ -32,21 +28,12 @@ someday.
 ==
 g t g
 State(?)
-
-
 State(LOW)
-
 g t g
 State(LOW)
-
-
 State(HIGH)
-
 c ^
-
-
 [me_Menu] Done.
-
 ```
 
 ## Requirements
