@@ -100,13 +100,19 @@ arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-prop
 
 # Code
 
-* [Example](Example)
-* [Interface](src/me_Menu.h)
-* [Implementation](src/me_Menu.cpp)
+* [Example][Example]
+* [Interface][Interface]
+* [Implementation][Implementation]
 
 
 # See also
 
-* [My other repositories](https://github.com/martin-eden/contents)
+* [My other embedded C++ libraries][Embedded]
+* [My other repositories][Repos]
 
 [Example]: examples/me_Menu/me_Menu.ino
+[Interface]: src/me_Menu.h
+[Implementation]: src/me_Menu.cpp
+
+[Embedded]: https://github.com/martin-eden/Embedded_Crafts/tree/master/Parts
+[Repos]: https://github.com/martin-eden/contents
