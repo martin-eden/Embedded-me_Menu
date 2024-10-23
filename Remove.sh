@@ -10,5 +10,4 @@ arduino-cli lib uninstall \
   me_SerialTokenizer \
   me_List \
   me_MemorySegment \
-  me_MemoryPoint \
   me_BaseTypes
