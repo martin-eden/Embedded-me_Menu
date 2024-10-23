@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-10-23
 */
 
 #include "me_Menu.h"
@@ -57,7 +57,7 @@ TBool TMenu::AddItem(
   CopyMemTo(ItemSeg, FromAddrSize((TUint_2) &OuterMenuItem, ItemStrucSize));
 
   // Add address of that copy to menu list
-  if (!List.Add(ItemSeg.Start.Addr))
+  if (!List.Add(ItemSeg.Addr))
   {
     Release(&ItemSeg);
     return false;
