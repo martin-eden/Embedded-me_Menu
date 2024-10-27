@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-10-27
 */
 
 #include "me_Menu.h"
@@ -24,8 +24,11 @@ void PrintListNode(
   TMenuItem * Item = (TMenuItem *) Data;
 
   Console.Write(Item->Command);
-  Console.Write(" - ");
-  Console.Write(Item->Description);
+  if (Item->Description.Size > 0)
+  {
+    Console.Write(" - ");
+    Console.Write(Item->Description);
+  }
   Console.EndLine();
 }
 
@@ -45,4 +48,5 @@ void me_Menu::TMenu::Print()
   2024-06-21 Spliced to standalone file
   2024-10-05
   2024-10-18
+  2024-10-27
 */
