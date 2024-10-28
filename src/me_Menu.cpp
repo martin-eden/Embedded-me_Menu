@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-23
+  Last mod.: 2024-10-28
 */
 
 #include "me_Menu.h"
@@ -94,13 +94,15 @@ void TMenu::Release()
 */
 void TMenu::Run()
 {
-  while (!List.IsEmpty())
+  TMenuItem Item;
+
+  while (true)
   {
-    TMenuItem Item;
+    if (List.IsEmpty())
+      break;
 
-    while(!GetCommand(&Item));
-
-    Item.Execute();
+    if (GetCommand(&Item))
+      Item.Execute();
   }
 }
 
