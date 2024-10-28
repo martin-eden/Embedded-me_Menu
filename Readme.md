@@ -1,4 +1,4 @@
-# What
+## What
 
 (2024-05/2024-06, 2024-10)
 
@@ -90,7 +90,7 @@ Run [Install.sh](Install.sh).
 Run [Remove.sh](Remove.sh).
 
 
-# Compile
+## Compile
 
 Zero-warnings compilation:
 
@@ -98,14 +98,14 @@ Zero-warnings compilation:
 arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-property compiler.cpp.extra_flags="-std=c++1z"
 ```
 
-# Code
+## Code
 
 * [Example][Example]
 * [Interface][Interface]
 * [Implementation][Implementation]
 
 
-# See also
+## See also
 
 * [My other embedded C++ libraries][Embedded]
 * [My other repositories][Repos]
