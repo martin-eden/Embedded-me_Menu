@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-10-27
 */
 
 #include "me_Menu.h"
@@ -52,36 +52,30 @@ TBool TMenu::GetCommand(
 )
 {
   using
-    me_SerialTokenizer::TCapturedEntity,
+    me_SerialTokenizer::TSerialTokenizer,
     me_MemorySegment::Freetown::FromAddrSize;
 
   /*
     Part one: get string
 
-    String will be pointed by <TCapturedEntity.Segment>.
+    String will be pointed by <Entity>.
     That segment will be inside of our buffer segment.
   */
-  TCapturedEntity Entity;
+  TMemorySegment Entity;
+
+  TSerialTokenizer Tokenizer;
 
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
-  {
-    TMemorySegment BuffSeg =
-      FromAddrSize((TUint_2) &Buff, BuffSize);
+  TMemorySegment BuffSeg =
+    FromAddrSize((TUint_2) &Buff, BuffSize);
 
-    me_SerialTokenizer::WaitEntity(&Entity, BuffSeg);
-
-    if (Entity.IsTrimmed)
-    {
-      // Entity was too long for our input buffer
-      return false;
-    }
-  }
+  Tokenizer.WaitEntity(&Entity, BuffSeg);
 
   // Part two: search by this string
   TSearchAndCatch SearchState;
   {
-    SearchState.LookingFor = Entity.Segment;
+    SearchState.LookingFor = Entity;
     SearchState.ItemFound = 0;
 
     List.Traverse(OnListVisit, (TUint_2) &SearchState);
@@ -102,4 +96,5 @@ TBool TMenu::GetCommand(
 /*
   2024-06-21 Spliced to standalone file
   2024-10-18
+  2024-10-28
 */
