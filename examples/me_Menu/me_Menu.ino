@@ -2,14 +2,16 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-10-27
 */
 
 #include <me_Menu.h>
 
-#include <me_UartSpeeds.h>
-#include <me_InstallStandardStreams.h>
 #include <me_BaseTypes.h>
+#include <me_UartSpeeds.h>
+#include <me_Uart.h>
+#include <me_Console.h>
+
 #include <me_MemorySegment.h>
 #include <me_StoredCall.h>
 
@@ -18,16 +20,11 @@ class TBuiltinLed;
 
 void setup()
 {
-  Serial.begin(me_UartSpeeds::Arduino_Normal_Bps);
+  me_Uart::Init(me_UartSpeeds::Arduino_Normal_Bps);
 
-  // Serial timeout (ms) is essential when reading from stream
-  Serial.setTimeout(15);
-
-  InstallStandardStreams();
-
-  printf("[me_Menu] We are here.\n");
+  Console.Print("[me_Menu] We are here.");
   Test();
-  printf("[me_Menu] Done.\n");
+  Console.Print("[me_Menu] Done.");
 }
 
 void loop()
@@ -70,18 +67,19 @@ class TBuiltinLed
 
 void TBuiltinLed::PrintState()
 {
-  printf("State(");
+  Console.Write("State ( ");
 
   if (State == 0)
-    printf("unknown");
+    Console.Write("unknown");
   else if (State == 1)
-    printf("LOW");
+    Console.Write("LOW");
   else if (State == 2)
-    printf("HIGH");
+    Console.Write("HIGH");
   else
-    printf("?"); // WTF?
+    Console.Write("?"); // WTF?
 
-  printf(")\n");
+  Console.Write(" )");
+  Console.EndLine();
 }
 
 void TBuiltinLed::ApplyState()
@@ -205,6 +203,7 @@ void Test()
 
   Menu.AddBuiltinCommands();
   Menu.Print();
+
   Menu.Run();
 }
 
@@ -213,4 +212,5 @@ void Test()
   2024-06 6
   2024-10-05
   2024-10-18
+  2024-10-27 [!-] Departed from printf() and Serial.
 */
