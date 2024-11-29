@@ -1,20 +1,21 @@
-// Shell: get command
+// Consume entity from stdin and match to our commands
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-27
+  Last mod.: 2024-11-30
 */
 
 #include "me_Menu.h"
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h> // Freetown::FromAddrSize()
+#include <me_MemorySegment.h> // Freetown::FromAddrSize(), AreEqual()
 #include <me_SerialTokenizer.h> // GetEntity()
 
 using namespace me_Menu;
 
 using
-  me_MemorySegment::TMemorySegment;
+  me_MemorySegment::TMemorySegment,
+  me_Menu::Unit::TUnit;
 
 /*
   Structure to hold search criteria and result
@@ -24,23 +25,27 @@ using
 struct TSearchAndCatch
 {
   TMemorySegment LookingFor;
-  TMenuItem * ItemFound;
+  TUnit * ItemFound;
 };
 
 /*
   List handler: find entity
 
-  If item says "It's me!", that's it.
+  If item's command is equal to what we got from serial then we found it.
 */
 void OnListVisit(
   TUint_2 NodeData,
   TUint_2 HandlerData
 )
 {
-  TMenuItem * Item = (TMenuItem *) NodeData;
+  using
+    me_MemorySegment::Freetown::AreEqual;
+
+  TUnit * Item = (TUnit *) NodeData;
+
   TSearchAndCatch * State = (TSearchAndCatch *) HandlerData;
 
-  if (Item->ItsMe(State->LookingFor))
+  if (AreEqual(Item->GetCommand(), State->LookingFor))
     State->ItemFound = Item;
 }
 
@@ -48,7 +53,7 @@ void OnListVisit(
   Consume one entity from serial and match it with our list of commands
 */
 TBool TMenu::GetCommand(
-  TMenuItem * ItemSelected
+  TUnit * ItemSelected
 )
 {
   using
@@ -63,17 +68,20 @@ TBool TMenu::GetCommand(
   */
   TMemorySegment Entity;
 
-  TSerialTokenizer Tokenizer;
-
   const TUint_2 BuffSize = 32;
-  TUint_1 Buff[BuffSize];
-  TMemorySegment BuffSeg =
-    FromAddrSize((TUint_2) &Buff, BuffSize);
+  TUint_1 Buffer[BuffSize];
 
-  Tokenizer.WaitEntity(&Entity, BuffSeg);
+  TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buffer, BuffSize);
+
+  {
+    TSerialTokenizer Tokenizer;
+
+    Tokenizer.WaitEntity(&Entity, BuffSeg);
+  }
 
   // Part two: search by this string
   TSearchAndCatch SearchState;
+
   {
     SearchState.LookingFor = Entity;
     SearchState.ItemFound = 0;
@@ -82,19 +90,18 @@ TBool TMenu::GetCommand(
   }
 
   // Part three: fulfill contract
+  if (SearchState.ItemFound != 0)
   {
-    if (SearchState.ItemFound != 0)
-    {
-      *ItemSelected = *SearchState.ItemFound;
+    *ItemSelected = *SearchState.ItemFound;
 
-      return true;
-    }
-    return false;
+    return true;
   }
+
+  return false;
 }
 
 /*
-  2024-06-21 Spliced to standalone file
-  2024-10-18
-  2024-10-28
+  2024-06 #
+  2024-10 ##
+  2024-11 ##
 */

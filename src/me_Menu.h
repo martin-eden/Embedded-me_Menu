@@ -1,39 +1,19 @@
-// Managing endpoints
+// "Menu" - list of (string, function pointer) items
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2024-11-30
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h>
-#include <me_StoredCall.h>
 #include <me_List.h>
+
+#include "me_Menu_Item.h" // Menu item
 
 namespace me_Menu
 {
-  /*
-    Menu item
-
-    Two strings (command and description) and stored handler to call.
-  */
-  struct TMenuItem
-  {
-    me_MemorySegment::TMemorySegment Command;
-    me_MemorySegment::TMemorySegment Description;
-    me_StoredCall::TStoredCall Handler;
-
-    // Return true when <.Command> == <Data>
-    TBool ItsMe(
-      me_MemorySegment::TMemorySegment Data
-    );
-
-    // Run item handler
-    void Execute();
-  };
-
   /*
     Menu
 
@@ -51,27 +31,34 @@ namespace me_Menu
     public:
       ~TMenu();
 
-      // Add copy of menu item to menu
+      // Add menu item
       TBool AddItem(
-        TMenuItem MenuItem
+        Unit::TUnit * Item
       );
 
-      // Add builtin commands: list, exit
+      // [Handy] Create and add item from explicit list of values
+      TBool CreateAndAddItem(
+        const TChar * Command,
+        TMethod Handler,
+        TUint_2 Instance
+      );
+
+      // [Handy] Add builtin commands: "? - list" and "^ - exit"
       TBool AddBuiltinCommands();
 
-      // Remove all items
-      void Release();
-
-      // Print menu list
+      // [Handy] Print menu list
       void Print();
 
       // Read command from stdin and execute corresponding item
       void Run();
 
+      // Remove all items
+      void Release();
+
     protected:
       // Get entity from stdin and match it with our commands
       TBool GetCommand(
-        TMenuItem * ItemSelected
+        Unit::TUnit * ItemSelected
       );
 
       // Add "print menu" ("?") command
@@ -80,39 +67,11 @@ namespace me_Menu
       // Add "exit" ("^") command
       TBool AddExitCommand();
   };
-
-  namespace Freetown
-  {
-    // Set fields in one call
-    TMenuItem ToItem(
-      me_MemorySegment::TMemorySegment Command,
-      me_MemorySegment::TMemorySegment Description,
-      me_StoredCall::TStoredCall Handler
-    );
-
-    // Create item from values. Allocates memory
-    TMenuItem ToItem(
-      const TAsciiz Command,
-      const TAsciiz Description,
-      TMethod Handler,
-      TUint_2 Instance
-    );
-
-    // Allocate mem for structure
-    TBool SpawnItem(
-      TMenuItem * * Item
-    );
-
-    // Release derived memory and struc
-    void KillItem(
-      TMenuItem * Item
-    );
-  }
 }
 
 /*
-  2024-05 3
-  2024-06 4
-  2024-10-18
-  2024-12-15 [-] MenuItem.PrintWrappings
+  2024-05 ###
+  2024-06 ####
+  2024-10 #
+  2024-11 ##
 */
