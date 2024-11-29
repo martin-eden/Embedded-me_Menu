@@ -2,21 +2,19 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2024-11-30
 */
 
 #include "me_Menu.h"
 
 #include <me_BaseTypes.h>
 #include <me_MemorySegment.h>
-#include <me_StoredCall.h>
 #include <me_List.h>
 
 using namespace me_Menu;
 
 using
-  me_MemorySegment::TMemorySegment,
-  me_StoredCall::TStoredCall;
+  me_Menu::Unit::TUnit;
 
 // ( Menu
 
@@ -29,60 +27,50 @@ TMenu::~TMenu()
 }
 
 /*
-  Add copy of menu item to menu
-
-  Memory allocated here is 12 bytes:
-    command seg, description seg, stored call
+  Add menu item to menu
 */
 TBool TMenu::AddItem(
-  TMenuItem OuterMenuItem
+  TUnit * Item
 )
 {
-  using
-    me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::FromAddrSize,
-    me_MemorySegment::Freetown::CopyMemTo,
-    me_MemorySegment::Freetown::Release;
+  TUint_2 ItemAddr = (TUint_2) Item;
 
-  const TUint_2 ItemStrucSize = sizeof(TMenuItem);
-
-  TMemorySegment ItemSeg;
-
-  // Allocate memory for copy of item structure
-  if (!Reserve(&ItemSeg, ItemStrucSize))
+  if (!List.Add(ItemAddr))
     return false;
-
-  // Set fields
-  CopyMemTo(ItemSeg, FromAddrSize((TUint_2) &OuterMenuItem, ItemStrucSize));
-
-  // Add address of that copy to menu list
-  if (!List.Add(ItemSeg.Addr))
-  {
-    Release(&ItemSeg);
-    return false;
-  }
 
   return true;
 }
 
 /*
-  List handler: release item memory
+  [Handy] Create and add item from explicit list of values
 */
-void KillItem_Handler(
-  TUint_2 Data,
-  TUint_2 Instance __attribute__((unused))
+TBool TMenu::CreateAndAddItem(
+  const TChar * Command,
+  TMethod Handler,
+  TUint_2 Instance
 )
 {
-  Freetown::KillItem((TMenuItem *) Data);
-}
+  using
+    me_Menu::Unit::Create,
+    me_Menu::Unit::Destroy;
 
-/*
-  Release memory of list items and the list
-*/
-void TMenu::Release()
-{
-  List.Traverse(KillItem_Handler);
-  List.Release();
+  TUnit * Item;
+  TBool IsOk;
+
+  IsOk = Create(&Item, Command, Handler, Instance);
+
+  if (!IsOk)
+    return false;
+
+  IsOk = AddItem(Item);
+
+  if (!IsOk)
+  {
+    Destroy(Item);
+    return false;
+  }
+
+  return true;
 }
 
 /*
@@ -93,7 +81,7 @@ void TMenu::Release()
 */
 void TMenu::Run()
 {
-  TMenuItem Item;
+  TUnit Item;
 
   while (true)
   {
@@ -105,143 +93,37 @@ void TMenu::Run()
   }
 }
 
+/*
+  List handler: release item memory
+*/
+void KillItem_Handler(
+  TUint_2 Data,
+  TUint_2 Instance __attribute__((unused))
+)
+{
+  using
+    me_Menu::Unit::Destroy;
+
+  TUnit * Unit = (TUnit *) Data;
+
+  Destroy(Unit);
+}
+
+/*
+  Release memory of list items and the list
+*/
+void TMenu::Release()
+{
+  List.Traverse(KillItem_Handler);
+  List.Release();
+}
+
 // ) Menu
 
-// ( Menu item
-
 /*
-  Check for equality
-
-  Current implementation is return true when our <Command> is the same
-  as in external data.
-
-  This method is used in list Traverse() callback.
-*/
-TBool TMenuItem::ItsMe(
-  TMemorySegment Data
-)
-{
-  return me_MemorySegment::Freetown::AreEqual(Command, Data);
-}
-
-/*
-  Run item's handler
-*/
-void TMenuItem::Execute()
-{
-  Handler.Run();
-};
-
-// ) Menu item
-
-// ( Freetown
-
-/*
-  [Handy] Return item structure from arguments
-
-  No heap allocations here.
-*/
-TMenuItem Freetown::ToItem(
-  TMemorySegment Command,
-  TMemorySegment Description,
-  TStoredCall Handler
-)
-{
-  TMenuItem Result;
-
-  Result.Command = Command;
-  Result.Description = Description;
-  Result.Handler = Handler;
-
-  return Result;
-}
-
-/*
-  [Handy] Create item from list of values
-
-  Memory allocated here depends of length of ASCIIZs.
-*/
-TMenuItem Freetown::ToItem(
-  const TAsciiz Command,
-  const TAsciiz Description,
-  TMethod Handler,
-  TUint_2 Instance
-)
-{
-  using
-    me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::FromAsciiz,
-    me_MemorySegment::Freetown::CopyMemTo,
-    me_MemorySegment::Freetown::Release,
-    me_StoredCall::Freetown::ToStoredCall;
-
-  TMenuItem Result; // I hope it is zeroed, we can return it early
-
-  /*
-    Allocate memory and copy ASCIIZ. But first we need to describe
-    them as memory segments.
-  */
-  TMemorySegment CommandCopy;
-  TMemorySegment DescriptionCopy;
-  {
-    TMemorySegment CommandOrig = FromAsciiz(Command);
-    TMemorySegment DescriptionOrig = FromAsciiz(Description);
-
-    if (!Reserve(&CommandCopy, CommandOrig.Size))
-      return Result;
-    CopyMemTo(CommandCopy, CommandOrig);
-
-    if (!Reserve(&DescriptionCopy, DescriptionOrig.Size))
-    {
-      Release(&CommandCopy);
-      return Result;
-    }
-    CopyMemTo(DescriptionCopy, DescriptionOrig);
-  }
-
-  // Using existing shortcut. Because someone should use it
-  return
-    ToItem(
-      CommandCopy,
-      DescriptionCopy,
-      ToStoredCall(Handler, Instance)
-    );
-}
-
-/*
-  Release memory from:
-    * menu item strings (variable)
-    * menu item structure (12 bytes)
-*/
-void Freetown::KillItem(
-  TMenuItem * Item
-)
-{
-  using
-    me_MemorySegment::Freetown::Release,
-    me_MemorySegment::Freetown::FromAddrSize;
-
-  // Release item strings
-  Release(&Item->Command);
-  Release(&Item->Description);
-
-  // Release item structure (12 bytes)
-  {
-    TMemorySegment ItemSeg =
-      FromAddrSize((TUint_2) Item, sizeof(TMenuItem));
-
-    Release(&ItemSeg);
-  }
-}
-
-// ) Freetown
-
-/*
-  2024-05 1
-  2024-06 9
-  2024-07
-  2024-10-05
-  2024-10-17
-  2024-10-18
-  2024-12-15
+  2024-05 #
+  2024-06 #########
+  2024-07 #
+  2024-10 ###
+  2024-11 ##
 */

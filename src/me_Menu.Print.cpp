@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-27
+  Last mod.: 2024-11-30
 */
 
 #include "me_Menu.h"
@@ -20,16 +20,12 @@ void PrintListNode(
   TUint_2 HandlerData __attribute__((unused))
 )
 {
-  using me_Menu::TMenuItem;
-  TMenuItem * Item = (TMenuItem *) Data;
+  using
+    me_Menu::Unit::TUnit;
 
-  Console.Write(Item->Command);
-  if (Item->Description.Size > 0)
-  {
-    Console.Write(" - ");
-    Console.Write(Item->Description);
-  }
-  Console.EndLine();
+  TUnit * Item = (TUnit *) Data;
+
+  Console.Print(Item->GetCommand());
 }
 
 /*
@@ -37,16 +33,20 @@ void PrintListNode(
 */
 void me_Menu::TMenu::Print()
 {
-  Console.Print("--");
+  Console.Print("(");
+
   Console.Indent();
+
   List.Traverse(PrintListNode);
+
   Console.Unindent();
-  Console.Print("==");
+
+  Console.Print(")");
 }
 
 /*
-  2024-06-21 Spliced to standalone file
-  2024-10-05
-  2024-10-18
-  2024-10-27
+  2024-06 #
+  2024-10 ###
+  2024-11-29
+  2024-11-30
 */
