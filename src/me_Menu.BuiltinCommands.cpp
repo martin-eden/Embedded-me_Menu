@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-11-30
 */
 
 #include "me_Menu.h"
@@ -31,10 +31,7 @@ void ListCommand_Handler(
 */
 TBool TMenu::AddListCommand()
 {
-  using
-    Freetown::ToItem;
-
-  return AddItem(ToItem("?", "List commands", ListCommand_Handler, (TUint_2) this));
+  return CreateAndAddItem("?", ListCommand_Handler, (TUint_2) this);
 }
 
 /*
@@ -60,10 +57,7 @@ void ExitCommand_Handler(
 */
 TBool TMenu::AddExitCommand()
 {
-  using
-    Freetown::ToItem;
-
-  return AddItem(ToItem("^", "Exit", ExitCommand_Handler, (TUint_2) this));
+  return CreateAndAddItem("^", ExitCommand_Handler, (TUint_2) this);
 }
 
 /*
@@ -75,6 +69,7 @@ TBool TMenu::AddBuiltinCommands()
 }
 
 /*
-  2024-06-21 Spliced to standalone file
-  2024-10-18
+  2024-06 #
+  2024-10 #
+  2024-11 #
 */
