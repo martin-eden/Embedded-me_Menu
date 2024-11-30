@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-27
+  Last mod.: 2024-11-30
 */
 
 #include <me_Menu.h>
@@ -20,7 +20,7 @@ class TBuiltinLed;
 
 void setup()
 {
-  me_Uart::Init(me_UartSpeeds::Arduino_Normal_Bps);
+  me_Uart::Init(me_UartSpeeds::Bps_115k);
 
   Console.Print("[me_Menu] We are here.");
   Test();
