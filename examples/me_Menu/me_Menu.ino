@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-19
+  Last mod.: 2024-12-11
 */
 
 #include <me_Menu.h>
@@ -179,10 +179,10 @@ void AddItems(
 {
   TUint_2 InstanceAddr = (TUint_2) &LedManager;
 
-  Menu->CreateAndAddItem("g", PrintState_Handler, InstanceAddr);
-  Menu->CreateAndAddItem("c", SetLow_Handler, InstanceAddr);
-  Menu->CreateAndAddItem("s", SetHigh_Handler, InstanceAddr);
-  Menu->CreateAndAddItem("t", Toggle_Handler, InstanceAddr);
+  Menu->AddNewItem("g", PrintState_Handler, InstanceAddr);
+  Menu->AddNewItem("c", SetLow_Handler, InstanceAddr);
+  Menu->AddNewItem("s", SetHigh_Handler, InstanceAddr);
+  Menu->AddNewItem("t", Toggle_Handler, InstanceAddr);
 }
 
 // --
