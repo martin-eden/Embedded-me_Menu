@@ -35,17 +35,14 @@ namespace me_Menu
       // Handler (pointer to method)
       me_StoredCall::TStoredCall Handler;
 
-      // [Management]
       // Set new command. Reallocates memory
       TBool SetCommand(me_MemorySegment::TMemorySegment NewCommand);
-      // Release memory of all variable-length structures
-      void ReleaseMemory();
-
-      // [Handy]
       // Return command
       me_MemorySegment::TMemorySegment GetCommand();
       // Run handler
       void RunHandler();
+      // Release memory of all variable-length structures
+      void ReleaseMemory();
     };
 
     // Allocate memory for structure
@@ -58,7 +55,7 @@ namespace me_Menu
       TCommandHandler * Unit
     );
 
-    // [Handy] Create item from values. Allocates memory
+    // Create item from values. Allocates memory
     TBool Create(
       TCommandHandler * * Unit,
       const TChar * Command,
@@ -66,7 +63,7 @@ namespace me_Menu
       TUint_2 Instance
     );
 
-    // [Handy] Destroy item. Deallocates memory
+    // Destroy item. Deallocates memory
     void Destroy(
       TCommandHandler * Unit
     );
@@ -74,8 +71,9 @@ namespace me_Menu
 }
 
 /*
-  2024-05 3
-  2024-06 4
-  2024-10
-  2024-11-29
+  2024-05 ###
+  2024-06 ####
+  2024-10 #
+  2024-11 #
+  2024-12-11
 */

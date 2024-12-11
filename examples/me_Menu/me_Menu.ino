@@ -40,15 +40,10 @@ void loop()
 
   I came with OUTPUT_LED manager:
 
-    g - (g)et - PrintState() - Print led state
-    c - (c)lear - SetLow() - Set led LOW
-    s - (s)et - SetHigh() - Set led HIGH
-    t - (t)oggle - Toggle() - Toggle state
-
-  Commands are strings, they don't need to be one character.
-
-  Design intention of [me_Menu] is program-to-program channel,
-  so commands should be short to minimize transmission time.
+    PrintState() - Print led state
+    SetLow() - Set led LOW
+    SetHigh() - Set led HIGH
+    Toggle() - Toggle state
 */
 class TBuiltinLed
 {
@@ -85,6 +80,7 @@ void TBuiltinLed::ApplyState()
 {
   if (State == 1)
     digitalWrite(LED_BUILTIN, LOW);
+
   if (State == 2)
     digitalWrite(LED_BUILTIN, HIGH);
 }
@@ -92,12 +88,14 @@ void TBuiltinLed::ApplyState()
 void TBuiltinLed::SetLow()
 {
   State = 1;
+
   ApplyState();
 }
 
 void TBuiltinLed::SetHigh()
 {
   State = 2;
+
   ApplyState();
 }
 
@@ -108,6 +106,7 @@ void TBuiltinLed::Toggle()
     State = 2;
   else
     State = 1;
+
   ApplyState();
 }
 
@@ -177,12 +176,18 @@ void AddItems(
   TBuiltinLed * LedManager
 )
 {
+  using
+    me_Menu::AddNewItem,
+    me_Menu::AddBuiltinCommands;
+
   TUint_2 InstanceAddr = (TUint_2) &LedManager;
 
-  Menu->AddNewItem("g", PrintState_Handler, InstanceAddr);
-  Menu->AddNewItem("c", SetLow_Handler, InstanceAddr);
-  Menu->AddNewItem("s", SetHigh_Handler, InstanceAddr);
-  Menu->AddNewItem("t", Toggle_Handler, InstanceAddr);
+  AddNewItem(Menu, "p", PrintState_Handler, InstanceAddr);
+  AddNewItem(Menu, "f", SetLow_Handler, InstanceAddr);
+  AddNewItem(Menu, "n", SetHigh_Handler, InstanceAddr);
+  AddNewItem(Menu, "t", Toggle_Handler, InstanceAddr);
+
+  AddBuiltinCommands(Menu);
 }
 
 // --
@@ -197,8 +202,7 @@ void Test()
 
   AddItems(&Menu, &LedManager);
 
-  Menu.AddBuiltinCommands();
-  Menu.Print();
+  Menu.PrintCommands();
 
   Menu.Run();
 }
@@ -208,4 +212,5 @@ void Test()
   2024-06 ######
   2024-10 ###
   2024-11-30
+  2024-12-11
 */
