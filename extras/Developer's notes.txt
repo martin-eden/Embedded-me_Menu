@@ -1,0 +1,67 @@
+Well, it's all started as text menu.
+
+Nice menu of commands like
+
+  < ON -- Turn lamp ON
+  < OFF -- Turn lamp OFF
+  < BYE -- Disconnect
+  < Enter command: > _
+
+Like early BBSs. I even though about making cursor selection
+using that hacky ANSI terminal codes.
+
+Then I noticed that I can paste commands. More, I can write program
+to send commands. It does not need to read that text. Though it might
+be helpful to get list of commands to understand that we've connected
+to the right system:
+
+  > ?
+  < (
+  <   ? - Get list of commands
+  <   ^ - Disconnect
+  <   N - Turn lamp ON
+  <   F - Turn lamp OFF
+  < )
+  > _
+
+At this point I noticed that "^" might apply to some inner menu.
+And system can provide commands to add/remove menu items. That's
+fascinating and I'm still thinking about this.
+
+But the issue here is that program does not need human-readable text.
+So code imploded to
+
+  > ?
+  < ( ? ^ N F )
+  > _
+
+Well, fuck. Very good for program, but useless for human beings,
+to which one I'm currently belong.
+
+So what's next? Problem with text is that it's not needed but occupies
+A LOT of memory. Orders more than needed by program. More than needed
+for data in some cases.
+
+Let's store it in read-only memory. We have Flash, 32k.
+
+Okay. But now how to add command from serial input? One of argument is
+text for humans that should be stored in Flash.
+
+Fuck it. Some typical coder (probably from Microsoft) would just
+extend menu item with text item in Flash. Then will ask StackOverflow
+about libraries for data structures for Flash. And be done with it.
+Until his supervisor will ask him to add another field. Like
+.LongDescription or .QrCode or .AuthToken. Any shit. It will be done.
+Perpetually.
+
+We're not going that way. Menu system ends here.
+
+Text descriptions will be implemented by something using this code.
+Maybe [me_TextMenu] with <.TTextMenuItem> or something.
+
+Any other shit will be added as needed. But
+  every piece of code should be maximally complete-ungrowable.
+
+Does not mean unwrappable or unreusable.
+
+-- Martin, 2024-12-11
