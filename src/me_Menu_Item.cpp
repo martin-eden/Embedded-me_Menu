@@ -13,58 +13,15 @@
 
 using namespace me_Menu::CommandHandler;
 
-/*
-TCommandHandler
-{
-  TMemorySegment Command
-  TStoredCall Handler
-}
-*/
-
-// Allocate memory for structure
-TBool me_Menu::CommandHandler::Allocate(
-  TCommandHandler * * Unit
-)
-{
-  using
-    me_MemorySegment::TMemorySegment,
-    me_MemorySegment::Freetown::Reserve;
-
-  TMemorySegment UnitSegment;
-
-  if (!Reserve(&UnitSegment, sizeof(TCommandHandler)))
-    return false;
-
-  *Unit = (TCommandHandler *) UnitSegment.Addr;
-
-  return true;
-}
-
-// Release memory of structure
-void me_Menu::CommandHandler::Deallocate(
-  TCommandHandler * Unit
-)
-{
-  using
-    me_MemorySegment::TMemorySegment,
-    me_MemorySegment::Freetown::Release,
-    me_MemorySegment::Freetown::FromAddrSize;
-
-  TMemorySegment UnitSegment =
-    FromAddrSize((TUint_2) Unit, sizeof(TCommandHandler));
-
-  Release(&UnitSegment);
-}
-
-// ( TCommandHandler
+using
+  me_MemorySegment::TMemorySegment;
 
 // Set command. Reallocates memory
-TBool me_Menu::CommandHandler::TCommandHandler::SetCommand(
-  me_MemorySegment::TMemorySegment NewCommand
+TBool TCommandHandler::SetCommand(
+  TMemorySegment NewCommand
 )
 {
   using
-    me_MemorySegment::TMemorySegment,
     me_MemorySegment::Freetown::Reserve,
     me_MemorySegment::Freetown::CopyMemTo,
     me_MemorySegment::Freetown::Release;
@@ -84,7 +41,7 @@ TBool me_Menu::CommandHandler::TCommandHandler::SetCommand(
 }
 
 // Release memory used by data
-void me_Menu::CommandHandler::TCommandHandler::ReleaseMemory()
+void TCommandHandler::ReleaseMemory()
 {
   using
     me_MemorySegment::Freetown::Release;
@@ -92,27 +49,54 @@ void me_Menu::CommandHandler::TCommandHandler::ReleaseMemory()
   Release(&Command);
 }
 
-/*
-  Return command
-
-  Design burden to complement SetCommand().
-*/
-me_MemorySegment::TMemorySegment me_Menu::CommandHandler::TCommandHandler::GetCommand()
+// Return command (design burden to complement SetCommand())
+TMemorySegment TCommandHandler::GetCommand()
 {
   return Command;
 }
 
 // Run handler
-void me_Menu::CommandHandler::TCommandHandler::RunHandler()
+void TCommandHandler::RunHandler()
 {
   Handler.Run();
 }
 
-// ) TCommandHandler
+// Allocate memory for structure
+TBool me_Menu::CommandHandler::Allocate(
+  TCommandHandler * * MenuItem
+)
+{
+  using
+    me_MemorySegment::Freetown::Reserve;
 
-// [Handy] Create item from values. Allocates data memory
+  TMemorySegment UnitSegment;
+
+  if (!Reserve(&UnitSegment, sizeof(TCommandHandler)))
+    return false;
+
+  *MenuItem = (TCommandHandler *) UnitSegment.Addr;
+
+  return true;
+}
+
+// Release memory of structure
+void me_Menu::CommandHandler::Deallocate(
+  TCommandHandler * MenuItem
+)
+{
+  using
+    me_MemorySegment::Freetown::Release,
+    me_MemorySegment::Freetown::FromAddrSize;
+
+  TMemorySegment UnitSegment =
+    FromAddrSize((TUint_2) MenuItem, sizeof(TCommandHandler));
+
+  Release(&UnitSegment);
+}
+
+// Create item from values. Allocates data memory
 TBool me_Menu::CommandHandler::Create(
-  TCommandHandler * * Unit,
+  TCommandHandler * * MenuItem,
   const TChar * CommandAsciiz,
   TMethod Handler,
   TUint_2 Instance
@@ -122,28 +106,28 @@ TBool me_Menu::CommandHandler::Create(
     me_MemorySegment::Freetown::FromAsciiz,
     me_StoredCall::Freetown::ToStoredCall;
 
-  if (!Allocate(Unit))
+  if (!Allocate(MenuItem))
     return false;
 
-  if (!(*Unit)->SetCommand(FromAsciiz(CommandAsciiz)))
+  if (!(*MenuItem)->SetCommand(FromAsciiz(CommandAsciiz)))
   {
-    Deallocate(*Unit);
+    Deallocate(*MenuItem);
     return false;
   }
 
-  (*Unit)->Handler = ToStoredCall(Handler, Instance);
+  (*MenuItem)->Handler = ToStoredCall(Handler, Instance);
 
   return true;
 }
 
 // [Handy] Destroy item. Deallocates data memory
 void me_Menu::CommandHandler::Destroy(
-  TCommandHandler * Unit
+  TCommandHandler * MenuItem
 )
 {
-  Unit->ReleaseMemory();
+  MenuItem->ReleaseMemory();
 
-  Deallocate(Unit);
+  Deallocate(MenuItem);
 }
 
 /*

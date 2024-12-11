@@ -36,18 +36,14 @@ namespace me_Menu
         CommandHandler::TCommandHandler * Item
       );
 
-      // [Handy] Create and add item from explicit list of values
-      TBool AddNewItem(
-        const TChar * Command,
-        TMethod Handler,
-        TUint_2 Instance
+      // Find item in our list by command text
+      TBool FindItem(
+        CommandHandler::TCommandHandler * Item,
+        me_MemorySegment::TMemorySegment Name
       );
 
-      // [Handy] Add builtin commands: "? - list" and "^ - exit"
-      TBool AddBuiltinCommands();
-
-      // [Handy] Print menu list
-      void Print();
+      // Print all available commands
+      void PrintCommands();
 
       // Read command from stdin and execute corresponding item
       void Run();
@@ -56,17 +52,36 @@ namespace me_Menu
       void Release();
 
     protected:
-      // Get entity from stdin and match it with our commands
-      TBool GetCommand(
-        CommandHandler::TCommandHandler * ItemSelected
+      // Get something like word of text from serial
+      void WaitCommand(
+        me_MemorySegment::TMemorySegment * Name,
+        me_MemorySegment::TMemorySegment NameBuffer
       );
 
-      // Add "print menu" ("?") command
-      TBool AddListCommand();
-
-      // Add "exit" ("^") command
-      TBool AddExitCommand();
   };
+
+  // Create and add item from explicit list of values
+  TBool AddNewItem(
+    TMenu * Menu,
+    const TChar * Command,
+    TMethod Handler,
+    TUint_2 Instance
+  );
+
+  // Add "list" command ("?" - print available commands)
+  TBool AddListCommand(
+    TMenu * Menu
+  );
+
+  // Add "exit" command ("^" - destroy menu items)
+  TBool AddExitCommand(
+    TMenu * Menu
+  );
+
+  // Add "list" and "exit" commands
+  TBool AddBuiltinCommands(
+    TMenu * Menu
+  );
 }
 
 /*
