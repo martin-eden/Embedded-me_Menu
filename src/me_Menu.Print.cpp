@@ -21,9 +21,9 @@ void PrintListNode(
 )
 {
   using
-    me_Menu::Unit::TUnit;
+    me_Menu::CommandHandler::TCommandHandler;
 
-  TUnit * Item = (TUnit *) Data;
+  TCommandHandler * Item = (TCommandHandler *) Data;
 
   Console.Print(Item->GetCommand());
 }
