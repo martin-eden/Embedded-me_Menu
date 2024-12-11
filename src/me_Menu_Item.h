@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-11-29
+  Last mod.: 2024-12-11
 */
 
 #pragma once
@@ -18,56 +18,49 @@ namespace me_Menu
 
     Contains menu item struc and allocators.
   */
-  namespace Unit
+  namespace CommandHandler
   {
     /*
       Menu item
 
       Menu item is command (string) and handler to call.
 
-      Menu item owns data memory. Memory should be released by
-      calling ReleaseMemory().
+      Menu item owns memory for command text.
+      Memory should be released by calling ReleaseMemory().
     */
-    struct TUnit
+    struct TCommandHandler
     {
-      // [Data]
-
       // Command (string)
       me_MemorySegment::TMemorySegment Command;
-
       // Handler (pointer to method)
       me_StoredCall::TStoredCall Handler;
 
       // [Management]
-
       // Set new command. Reallocates memory
       TBool SetCommand(me_MemorySegment::TMemorySegment NewCommand);
-
       // Release memory of all variable-length structures
       void ReleaseMemory();
 
       // [Handy]
-
       // Return command
       me_MemorySegment::TMemorySegment GetCommand();
-
       // Run handler
-      void Execute();
+      void RunHandler();
     };
 
     // Allocate memory for structure
     TBool Allocate(
-      TUnit * * Unit
+      TCommandHandler * * Unit
     );
 
     // Release memory of structure
     void Deallocate(
-      TUnit * Unit
+      TCommandHandler * Unit
     );
 
     // [Handy] Create item from values. Allocates memory
     TBool Create(
-      TUnit * * Unit,
+      TCommandHandler * * Unit,
       const TChar * Command,
       TMethod Handler,
       TUint_2 Instance
@@ -75,7 +68,7 @@ namespace me_Menu
 
     // [Handy] Destroy item. Deallocates memory
     void Destroy(
-      TUnit * Unit
+      TCommandHandler * Unit
     );
   }
 }

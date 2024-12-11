@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-11-30
+  Last mod.: 2024-12-11
 */
 
 #pragma once
@@ -33,11 +33,11 @@ namespace me_Menu
 
       // Add menu item
       TBool AddItem(
-        Unit::TUnit * Item
+        CommandHandler::TCommandHandler * Item
       );
 
       // [Handy] Create and add item from explicit list of values
-      TBool CreateAndAddItem(
+      TBool AddNewItem(
         const TChar * Command,
         TMethod Handler,
         TUint_2 Instance
@@ -58,7 +58,7 @@ namespace me_Menu
     protected:
       // Get entity from stdin and match it with our commands
       TBool GetCommand(
-        Unit::TUnit * ItemSelected
+        CommandHandler::TCommandHandler * ItemSelected
       );
 
       // Add "print menu" ("?") command

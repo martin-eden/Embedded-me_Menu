@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-11-30
+  Last mod.: 2024-12-11
 */
 
 #include "me_Menu_Item.h"
@@ -11,24 +11,19 @@
 #include <me_MemorySegment.h>
 #include <me_StoredCall.h>
 
-using namespace me_Menu::Unit;
+using namespace me_Menu::CommandHandler;
 
 /*
-TUnit
+TCommandHandler
 {
-  TMemorySegment Command;
-  TStoredCall Handler;
-
-  TBool SetCommand(TMemorySegment NewCommand);
-  void ReleaseMemory();
-  TMemorySegment GetCommand();
-  void Execute();
-};
+  TMemorySegment Command
+  TStoredCall Handler
+}
 */
 
 // Allocate memory for structure
-TBool me_Menu::Unit::Allocate(
-  TUnit * * Unit
+TBool me_Menu::CommandHandler::Allocate(
+  TCommandHandler * * Unit
 )
 {
   using
@@ -37,17 +32,17 @@ TBool me_Menu::Unit::Allocate(
 
   TMemorySegment UnitSegment;
 
-  if (!Reserve(&UnitSegment, sizeof(TUnit)))
+  if (!Reserve(&UnitSegment, sizeof(TCommandHandler)))
     return false;
 
-  *Unit = (TUnit *) UnitSegment.Addr;
+  *Unit = (TCommandHandler *) UnitSegment.Addr;
 
   return true;
 }
 
 // Release memory of structure
-void me_Menu::Unit::Deallocate(
-  TUnit * Unit
+void me_Menu::CommandHandler::Deallocate(
+  TCommandHandler * Unit
 )
 {
   using
@@ -56,15 +51,15 @@ void me_Menu::Unit::Deallocate(
     me_MemorySegment::Freetown::FromAddrSize;
 
   TMemorySegment UnitSegment =
-    FromAddrSize((TUint_2) Unit, sizeof(TUnit));
+    FromAddrSize((TUint_2) Unit, sizeof(TCommandHandler));
 
   Release(&UnitSegment);
 }
 
-// ( TUnit
+// ( TCommandHandler
 
 // Set command. Reallocates memory
-TBool me_Menu::Unit::TUnit::SetCommand(
+TBool me_Menu::CommandHandler::TCommandHandler::SetCommand(
   me_MemorySegment::TMemorySegment NewCommand
 )
 {
@@ -89,7 +84,7 @@ TBool me_Menu::Unit::TUnit::SetCommand(
 }
 
 // Release memory used by data
-void me_Menu::Unit::TUnit::ReleaseMemory()
+void me_Menu::CommandHandler::TCommandHandler::ReleaseMemory()
 {
   using
     me_MemorySegment::Freetown::Release;
@@ -97,23 +92,27 @@ void me_Menu::Unit::TUnit::ReleaseMemory()
   Release(&Command);
 }
 
-// Return command
-me_MemorySegment::TMemorySegment me_Menu::Unit::TUnit::GetCommand()
+/*
+  Return command
+
+  Design burden to complement SetCommand().
+*/
+me_MemorySegment::TMemorySegment me_Menu::CommandHandler::TCommandHandler::GetCommand()
 {
   return Command;
 }
 
 // Run handler
-void me_Menu::Unit::TUnit::Execute()
+void me_Menu::CommandHandler::TCommandHandler::RunHandler()
 {
   Handler.Run();
 }
 
-// ) TUnit
+// ) TCommandHandler
 
 // [Handy] Create item from values. Allocates data memory
-TBool me_Menu::Unit::Create(
-  TUnit * * Unit,
+TBool me_Menu::CommandHandler::Create(
+  TCommandHandler * * Unit,
   const TChar * CommandAsciiz,
   TMethod Handler,
   TUint_2 Instance
@@ -138,8 +137,8 @@ TBool me_Menu::Unit::Create(
 }
 
 // [Handy] Destroy item. Deallocates data memory
-void me_Menu::Unit::Destroy(
-  TUnit * Unit
+void me_Menu::CommandHandler::Destroy(
+  TCommandHandler * Unit
 )
 {
   Unit->ReleaseMemory();

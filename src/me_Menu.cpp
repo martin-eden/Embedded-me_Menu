@@ -14,7 +14,7 @@
 using namespace me_Menu;
 
 using
-  me_Menu::Unit::TUnit;
+  me_Menu::CommandHandler::TCommandHandler;
 
 // ( Menu
 
@@ -30,7 +30,7 @@ TMenu::~TMenu()
   Add menu item to menu
 */
 TBool TMenu::AddItem(
-  TUnit * Item
+  TCommandHandler * Item
 )
 {
   TUint_2 ItemAddr = (TUint_2) Item;
@@ -44,17 +44,17 @@ TBool TMenu::AddItem(
 /*
   [Handy] Create and add item from explicit list of values
 */
-TBool TMenu::CreateAndAddItem(
+TBool TMenu::AddNewItem(
   const TChar * Command,
   TMethod Handler,
   TUint_2 Instance
 )
 {
   using
-    me_Menu::Unit::Create,
-    me_Menu::Unit::Destroy;
+    me_Menu::CommandHandler::Create,
+    me_Menu::CommandHandler::Destroy;
 
-  TUnit * Item;
+  TCommandHandler * Item;
   TBool IsOk;
 
   IsOk = Create(&Item, Command, Handler, Instance);
@@ -81,7 +81,7 @@ TBool TMenu::CreateAndAddItem(
 */
 void TMenu::Run()
 {
-  TUnit Item;
+  TCommandHandler Item;
 
   while (true)
   {
@@ -89,7 +89,7 @@ void TMenu::Run()
       break;
 
     if (GetCommand(&Item))
-      Item.Execute();
+      Item.RunHandler();
   }
 }
 
@@ -102,9 +102,9 @@ void KillItem_Handler(
 )
 {
   using
-    me_Menu::Unit::Destroy;
+    me_Menu::CommandHandler::Destroy;
 
-  TUnit * Unit = (TUnit *) Data;
+  TCommandHandler * Unit = (TCommandHandler *) Data;
 
   Destroy(Unit);
 }

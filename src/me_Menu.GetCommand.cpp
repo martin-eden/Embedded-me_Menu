@@ -15,7 +15,7 @@ using namespace me_Menu;
 
 using
   me_MemorySegment::TMemorySegment,
-  me_Menu::Unit::TUnit;
+  me_Menu::CommandHandler::TCommandHandler;
 
 /*
   Structure to hold search criteria and result
@@ -25,7 +25,7 @@ using
 struct TSearchAndCatch
 {
   TMemorySegment LookingFor;
-  TUnit * ItemFound;
+  TCommandHandler * ItemFound;
 };
 
 /*
@@ -41,7 +41,7 @@ void OnListVisit(
   using
     me_MemorySegment::Freetown::AreEqual;
 
-  TUnit * Item = (TUnit *) NodeData;
+  TCommandHandler * Item = (TCommandHandler *) NodeData;
 
   TSearchAndCatch * State = (TSearchAndCatch *) HandlerData;
 
@@ -53,7 +53,7 @@ void OnListVisit(
   Consume one entity from serial and match it with our list of commands
 */
 TBool TMenu::GetCommand(
-  TUnit * ItemSelected
+  TCommandHandler * ItemSelected
 )
 {
   using

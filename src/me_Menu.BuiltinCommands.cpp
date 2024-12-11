@@ -31,7 +31,7 @@ void ListCommand_Handler(
 */
 TBool TMenu::AddListCommand()
 {
-  return CreateAndAddItem("?", ListCommand_Handler, (TUint_2) this);
+  return AddNewItem("?", ListCommand_Handler, (TUint_2) this);
 }
 
 /*
@@ -57,7 +57,7 @@ void ExitCommand_Handler(
 */
 TBool TMenu::AddExitCommand()
 {
-  return CreateAndAddItem("^", ExitCommand_Handler, (TUint_2) this);
+  return AddNewItem("^", ExitCommand_Handler, (TUint_2) this);
 }
 
 /*
