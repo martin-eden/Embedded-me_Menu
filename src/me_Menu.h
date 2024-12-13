@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2024-12-12
 */
 
 #pragma once
@@ -95,8 +95,8 @@ namespace me_Menu
 
     // Create item from values. Allocates memory
     TMenuItem ToItem(
-      const TChar * Command,
-      const TChar * Description,
+      const TAsciiz Command,
+      const TAsciiz Description,
       TMethod Handler,
       TUint_2 Instance
     );

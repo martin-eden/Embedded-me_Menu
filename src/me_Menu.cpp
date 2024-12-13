@@ -184,8 +184,8 @@ TMenuItem Freetown::ToItem(
   Memory allocated here depends of length of ASCIIZs.
 */
 TMenuItem Freetown::ToItem(
-  const TChar * Command,
-  const TChar * Description,
+  const TAsciiz Command,
+  const TAsciiz Description,
   TMethod Handler,
   TUint_2 Instance
 )
