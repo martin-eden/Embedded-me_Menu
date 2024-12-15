@@ -97,7 +97,7 @@ void me_Menu::CommandHandler::Deallocate(
 // Create item from values. Allocates data memory
 TBool me_Menu::CommandHandler::Create(
   TCommandHandler * * MenuItem,
-  const TChar * CommandAsciiz,
+  TAsciiz CommandAsciiz,
   TMethod Handler,
   TUint_2 Instance
 )
