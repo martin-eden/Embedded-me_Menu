@@ -63,7 +63,7 @@ namespace me_Menu
   // Create and add item from explicit list of values
   TBool AddNewItem(
     TMenu * Menu,
-    const TChar * Command,
+    TAsciiz Command,
     TMethod Handler,
     TUint_2 Instance
   );
