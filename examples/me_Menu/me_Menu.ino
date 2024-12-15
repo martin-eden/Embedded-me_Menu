@@ -128,7 +128,7 @@ void TBuiltinLed::Toggle()
   In this case we have nothing for "data". Menu does not use it.
 */
 void PrintState_Handler(
-  TAddress Data __attribute__((unused)),
+  TAddress Data [[gnu::unused]],
   TAddress Instance
 )
 {
@@ -137,7 +137,7 @@ void PrintState_Handler(
 }
 
 void SetLow_Handler(
-  TAddress Data __attribute__((unused)),
+  TAddress Data [[gnu::unused]],
   TAddress Instance
 )
 {
@@ -146,7 +146,7 @@ void SetLow_Handler(
 }
 
 void SetHigh_Handler(
-  TAddress Data __attribute__((unused)),
+  TAddress Data [[gnu::unused]],
   TAddress Instance
 )
 {
@@ -155,7 +155,7 @@ void SetHigh_Handler(
 }
 
 void Toggle_Handler(
-  TAddress Data __attribute__((unused)),
+  TAddress Data [[gnu::unused]],
   TAddress Instance
 )
 {
