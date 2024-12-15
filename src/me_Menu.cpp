@@ -47,7 +47,7 @@ TBool TMenu::AddItem(
   TCommandHandler * MenuItem
 )
 {
-  TUint_2 ItemAddr = (TUint_2) MenuItem;
+  TAddress ItemAddr = (TAddress) MenuItem;
 
   if (!List.Add(ItemAddr))
     return false;
@@ -77,8 +77,8 @@ void TMenu::WaitCommand(
   If item's command is equal to what we got from serial then we found it.
 */
 void OnListVisit(
-  TUint_2 NodeData,
-  TUint_2 HandlerData
+  TAddress NodeData,
+  TAddress HandlerData
 )
 {
   using
@@ -106,7 +106,7 @@ TBool TMenu::FindItem(
     SearchState.LookingFor = Name;
     SearchState.ItemFound = 0;
 
-    List.Traverse(OnListVisit, (TUint_2) &SearchState);
+    List.Traverse(OnListVisit, (TAddress) &SearchState);
   }
 
   if (SearchState.ItemFound != 0)
@@ -123,8 +123,8 @@ TBool TMenu::FindItem(
   List handler: print item
 */
 void PrintListNode(
-  TUint_2 Data,
-  TUint_2 HandlerData __attribute__((unused))
+  TAddress Data,
+  TAddress HandlerData __attribute__((unused))
 )
 {
   TCommandHandler * Item = (TCommandHandler *) Data;
@@ -196,8 +196,8 @@ void TMenu::Run()
   List handler: release item memory
 */
 void KillItem_Handler(
-  TUint_2 Data,
-  TUint_2 Instance __attribute__((unused))
+  TAddress Data,
+  TAddress Instance __attribute__((unused))
 )
 {
   using
@@ -226,7 +226,7 @@ TBool me_Menu::AddNewItem(
   TMenu * Menu,
   TAsciiz Command,
   TMethod Handler,
-  TUint_2 Instance
+  TAddress Instance
 )
 {
   using
@@ -256,8 +256,8 @@ TBool me_Menu::AddNewItem(
   "list" command handler
 */
 void ListCommand_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TMenu * Menu = (TMenu *) Instance;
@@ -277,15 +277,15 @@ TBool me_Menu::AddListCommand(
   using
     me_Menu::AddNewItem;
 
-  return AddNewItem(Menu, "?", ListCommand_Handler, (TUint_2) Menu);
+  return AddNewItem(Menu, "?", ListCommand_Handler, (TAddress) Menu);
 }
 
 /*
   "exit" command handler
 */
 void ExitCommand_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TMenu * Menu = (TMenu *) Instance;
@@ -305,7 +305,7 @@ TBool me_Menu::AddExitCommand(
   using
     me_Menu::AddNewItem;
 
-  return AddNewItem(Menu, "^", ExitCommand_Handler, (TUint_2) Menu);
+  return AddNewItem(Menu, "^", ExitCommand_Handler, (TAddress) Menu);
 }
 
 /*

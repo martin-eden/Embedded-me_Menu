@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-11
+  Last mod.: 2024-12-15
 */
 
 #include <me_Menu.h>
@@ -128,8 +128,8 @@ void TBuiltinLed::Toggle()
   In this case we have nothing for "data". Menu does not use it.
 */
 void PrintState_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
@@ -137,8 +137,8 @@ void PrintState_Handler(
 }
 
 void SetLow_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
@@ -146,8 +146,8 @@ void SetLow_Handler(
 }
 
 void SetHigh_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
@@ -155,8 +155,8 @@ void SetHigh_Handler(
 }
 
 void Toggle_Handler(
-  TUint_2 Data __attribute__((unused)),
-  TUint_2 Instance
+  TAddress Data __attribute__((unused)),
+  TAddress Instance
 )
 {
   TBuiltinLed * LedManager = (TBuiltinLed *) Instance;
@@ -180,7 +180,7 @@ void AddItems(
     me_Menu::AddNewItem,
     me_Menu::AddBuiltinCommands;
 
-  TUint_2 InstanceAddr = (TUint_2) &LedManager;
+  TAddress InstanceAddr = (TAddress) &LedManager;
 
   AddNewItem(Menu, "p", PrintState_Handler, InstanceAddr);
   AddNewItem(Menu, "f", SetLow_Handler, InstanceAddr);
@@ -211,6 +211,7 @@ void Test()
   2024-05 ###
   2024-06 ######
   2024-10 ###
-  2024-11-30
+  2024-11 #
   2024-12-11
+  2024-12-15
 */

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-11
+  Last mod.: 2024-12-15
 */
 
 #include "me_Menu_Item.h"
@@ -89,7 +89,7 @@ void me_Menu::CommandHandler::Deallocate(
     me_MemorySegment::Freetown::FromAddrSize;
 
   TMemorySegment UnitSegment =
-    FromAddrSize((TUint_2) MenuItem, sizeof(TCommandHandler));
+    FromAddrSize((TAddress) MenuItem, sizeof(TCommandHandler));
 
   Release(&UnitSegment);
 }
@@ -99,7 +99,7 @@ TBool me_Menu::CommandHandler::Create(
   TCommandHandler * * MenuItem,
   TAsciiz CommandAsciiz,
   TMethod Handler,
-  TUint_2 Instance
+  TAddress Instance
 )
 {
   using
