@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-11
+  Last mod.: 2024-12-15
 */
 
 #pragma once
@@ -60,7 +60,7 @@ namespace me_Menu
       TCommandHandler * * Unit,
       TAsciiz Command,
       TMethod Handler,
-      TUint_2 Instance
+      TAddress Instance
     );
 
     // Destroy item. Deallocates memory

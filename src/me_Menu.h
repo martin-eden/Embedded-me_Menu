@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-11
+  Last mod.: 2024-12-15
 */
 
 #pragma once
@@ -65,7 +65,7 @@ namespace me_Menu
     TMenu * Menu,
     TAsciiz Command,
     TMethod Handler,
-    TUint_2 Instance
+    TAddress Instance
   );
 
   // Add "list" command ("?" - print available commands)
