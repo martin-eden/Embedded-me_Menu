@@ -58,7 +58,7 @@ namespace me_Menu
     // Create item from values. Allocates memory
     TBool Create(
       TCommandHandler * * Unit,
-      const TChar * Command,
+      TAsciiz Command,
       TMethod Handler,
       TUint_2 Instance
     );

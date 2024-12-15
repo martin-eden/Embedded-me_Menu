@@ -224,7 +224,7 @@ void TMenu::Release()
 */
 TBool me_Menu::AddNewItem(
   TMenu * Menu,
-  const TChar * Command,
+  TAsciiz Command,
   TMethod Handler,
   TUint_2 Instance
 )
