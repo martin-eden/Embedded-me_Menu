@@ -11,9 +11,6 @@
 #include <me_Uart.h>
 #include <me_Console.h>
 
-#include <me_MemorySegment.h>
-#include <me_StoredCall.h>
-
 // Forwards:
 class TBuiltinLed;
 
@@ -22,7 +19,7 @@ void setup()
   me_Uart::Init(me_Uart::Speed_115k_Bps);
 
   Console.Print("[me_Menu] We are here.");
-  Test();
+  RunTest();
   Console.Print("[me_Menu] Done.");
 }
 
@@ -166,6 +163,52 @@ void Toggle_Handler(
 // --
 
 /*
+  Print human-friendly text about commands
+*/
+void PrintHelp()
+{
+  static const TAsciiz HelpText =
+    R"(
+Hello traveler!
+
+This is a menu system for other programs.
+
+It contains list of commands. Each command is just string.
+Entering that string executes command. (Which may read
+additional data if needed.)
+
+Stock menu provides two commands:
+
+  ^ - exit menu
+  ? - print list of available commands
+
+There are no human-friendly description for command.
+Because command may be added to menu at run-time.
+And description have no purpose in program-program
+communication.
+
+List of additional commands for this demo:
+
+  t - toggle LED
+  n - set LED on
+  f - set LED off
+  p - print state of LED
+
+Actually this game is more challenging when
+you figuring out it by yourself.
+
+We're not malevolent. We're just not storing
+data we don't use.
+
+-- Martin, 2024-12-15
+)";
+
+  Console.Print(HelpText);
+}
+
+// --
+
+/*
   Populate menu
 
   When wiring item handlers we need class instance,
@@ -195,12 +238,14 @@ void AddItems(
 /*
   Menu list life
 */
-void Test()
+void RunTest()
 {
   me_Menu::TMenu Menu;
   TBuiltinLed LedManager;
 
   AddItems(&Menu, &LedManager);
+
+  PrintHelp();
 
   Menu.PrintCommands();
 
