@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-28
+  Last mod.: 2024-12-15
 */
 
 #include "me_Menu.h"
@@ -11,7 +11,6 @@
 #include <me_MemorySegment.h>
 #include <me_StoredCall.h>
 #include <me_List.h>
-#include <me_Console.h> // for PrintWrappings()
 
 using namespace me_Menu;
 
@@ -109,27 +108,6 @@ void TMenu::Run()
 // ) Menu
 
 // ( Menu item
-
-/*
-  [Debug] Represent state
-*/
-void TMenuItem::PrintWrappings()
-{
-  using
-    me_MemorySegment::Freetown::PrintWrappings;
-
-  Console.Print("Menu item");
-
-  Console.Indent();
-  Console.Print("Command");
-  PrintWrappings(Command);
-  Console.Unindent();
-
-  Console.Indent();
-  Console.Print("Description");
-  PrintWrappings(Description);
-  Console.Unindent();
-}
 
 /*
   Check for equality
@@ -265,4 +243,5 @@ void Freetown::KillItem(
   2024-10-05
   2024-10-17
   2024-10-18
+  2024-12-15
 */

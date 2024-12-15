@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-12
+  Last mod.: 2024-12-15
 */
 
 #pragma once
@@ -24,9 +24,6 @@ namespace me_Menu
     me_MemorySegment::TMemorySegment Command;
     me_MemorySegment::TMemorySegment Description;
     me_StoredCall::TStoredCall Handler;
-
-    // [Debug] Print state
-    void PrintWrappings();
 
     // Return true when <.Command> == <Data>
     TBool ItsMe(
@@ -117,4 +114,5 @@ namespace me_Menu
   2024-05 3
   2024-06 4
   2024-10-18
+  2024-12-15 [-] MenuItem.PrintWrappings
 */
