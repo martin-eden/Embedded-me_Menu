@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-11
+  Last mod.: 2024-12-16
 */
 
 #include "me_Menu.h"
@@ -143,6 +143,8 @@ void TMenu::PrintCommands()
   List.Traverse(PrintListNode);
 
   Console.Write(")");
+
+  Console.EndLine();
 }
 
 /*
