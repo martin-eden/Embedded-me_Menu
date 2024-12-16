@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2024-12-16
 */
 
 #include <me_Menu.h>
@@ -10,6 +10,7 @@
 #include <me_BaseTypes.h>
 #include <me_Uart.h>
 #include <me_Console.h>
+#include <me_MemorySegment.h>
 
 // Forwards:
 class TBuiltinLed;
@@ -167,8 +168,9 @@ void Toggle_Handler(
 */
 void PrintHelp()
 {
-  static const TAsciiz HelpText =
+  static const TUint_1 HelpText[] [[gnu::progmem]] =
     R"(
+--
 Hello traveler!
 
 This is a menu system for other programs.
@@ -203,7 +205,14 @@ data we don't use.
 -- Martin, 2024-12-15
 )";
 
-  Console.Print(HelpText);
+  using
+    me_MemorySegment::TMemorySegment,
+    me_MemorySegment::Freetown::FromAddrSize;
+
+  TMemorySegment FlashSeg =
+    FromAddrSize((TAddress) HelpText, sizeof(HelpText) - 1);
+
+  Console.PrintFlash(FlashSeg);
 }
 
 // --
