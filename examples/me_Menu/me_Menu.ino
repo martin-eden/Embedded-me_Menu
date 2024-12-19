@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-16
+  Last mod.: 2024-12-19
 */
 
 #include <me_Menu.h>
@@ -212,7 +212,7 @@ data we don't use.
   TMemorySegment FlashSeg =
     FromAddrSize((TAddress) HelpText, sizeof(HelpText) - 1);
 
-  Console.PrintFlash(FlashSeg);
+  Console.PrintProgmem(FlashSeg);
 }
 
 // --
