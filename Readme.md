@@ -80,14 +80,9 @@ c ^
   * bash
 
 
-## Install
+## Install/remove
 
-Run [Install.sh](Install.sh).
-
-
-## Remove
-
-Run [Remove.sh](Remove.sh).
+Easy way is to clone [GetLibs][GetLibs] repo and run it's code.
 
 
 ## Compile
@@ -113,6 +108,8 @@ arduino-cli compile --fqbn arduino:avr:uno --quiet --warnings all . --build-prop
 [Example]: examples/me_Menu/me_Menu.ino
 [Interface]: src/me_Menu.h
 [Implementation]: src/me_Menu.cpp
+
+[GetLibs]: https://github.com/martin-eden/Embedded-Framework-GetLibs
 
 [Embedded]: https://github.com/martin-eden/Embedded_Crafts/tree/master/Parts
 [Repos]: https://github.com/martin-eden/contents
