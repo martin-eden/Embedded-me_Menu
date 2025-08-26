@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2025-08-26
 */
 
 #include "me_Menu.h"
@@ -121,7 +121,7 @@ TBool TMenuItem::ItsMe(
   TMemorySegment Data
 )
 {
-  return me_MemorySegment::Freetown::AreEqual(Command, Data);
+  return me_MemorySegment::AreEqual(Command, Data);
 }
 
 /*
