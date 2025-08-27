@@ -2,13 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2025-08-27
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h>
 #include <me_StoredCall.h>
 #include <me_List.h>
 
@@ -21,13 +20,13 @@ namespace me_Menu
   */
   struct TMenuItem
   {
-    me_MemorySegment::TMemorySegment Command;
-    me_MemorySegment::TMemorySegment Description;
+    TAddressSegment Command;
+    TAddressSegment Description;
     me_StoredCall::TStoredCall Handler;
 
     // Return true when <.Command> == <Data>
     TBool ItsMe(
-      me_MemorySegment::TMemorySegment Data
+      TAddressSegment Data
     );
 
     // Run item handler
@@ -85,8 +84,8 @@ namespace me_Menu
   {
     // Set fields in one call
     TMenuItem ToItem(
-      me_MemorySegment::TMemorySegment Command,
-      me_MemorySegment::TMemorySegment Description,
+      TAddressSegment Command,
+      TAddressSegment Description,
       me_StoredCall::TStoredCall Handler
     );
 

@@ -13,9 +13,6 @@
 
 using namespace me_Menu;
 
-using
-  me_MemorySegment::TMemorySegment;
-
 /*
   Structure to hold search criteria and result
 
@@ -23,7 +20,7 @@ using
 */
 struct TSearchAndCatch
 {
-  TMemorySegment LookingFor;
+  TAddressSegment LookingFor;
   TMenuItem * ItemFound;
 };
 
@@ -61,13 +58,13 @@ TBool TMenu::GetCommand(
     String will be pointed by <Entity>.
     That segment will be inside of our buffer segment.
   */
-  TMemorySegment Entity;
+  TAddressSegment Entity;
 
   TSerialTokenizer Tokenizer;
 
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
-  TMemorySegment BuffSeg =
+  TAddressSegment BuffSeg =
     FromAddrSize((TUint_2) &Buff, BuffSize);
 
   Tokenizer.WaitEntity(&Entity, BuffSeg);

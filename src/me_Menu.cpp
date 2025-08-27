@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-26
+  Last mod.: 2025-08-27
 */
 
 #include "me_Menu.h"
@@ -15,7 +15,6 @@
 using namespace me_Menu;
 
 using
-  me_MemorySegment::TMemorySegment,
   me_StoredCall::TStoredCall;
 
 // ( Menu
@@ -46,7 +45,7 @@ TBool TMenu::AddItem(
 
   const TUint_2 ItemStrucSize = sizeof(TMenuItem);
 
-  TMemorySegment ItemSeg;
+  TAddressSegment ItemSeg;
 
   // Allocate memory for copy of item structure
   if (!Reserve(&ItemSeg, ItemStrucSize))
@@ -118,7 +117,7 @@ void TMenu::Run()
   This method is used in list Traverse() callback.
 */
 TBool TMenuItem::ItsMe(
-  TMemorySegment Data
+  TAddressSegment Data
 )
 {
   return me_MemorySegment::AreEqual(Command, Data);
@@ -142,8 +141,8 @@ void TMenuItem::Execute()
   No heap allocations here.
 */
 TMenuItem Freetown::ToItem(
-  TMemorySegment Command,
-  TMemorySegment Description,
+  TAddressSegment Command,
+  TAddressSegment Description,
   TStoredCall Handler
 )
 {
@@ -181,11 +180,11 @@ TMenuItem Freetown::ToItem(
     Allocate memory and copy ASCIIZ. But first we need to describe
     them as memory segments.
   */
-  TMemorySegment CommandCopy;
-  TMemorySegment DescriptionCopy;
+  TAddressSegment CommandCopy;
+  TAddressSegment DescriptionCopy;
   {
-    TMemorySegment CommandOrig = FromAsciiz(Command);
-    TMemorySegment DescriptionOrig = FromAsciiz(Description);
+    TAddressSegment CommandOrig = FromAsciiz(Command);
+    TAddressSegment DescriptionOrig = FromAsciiz(Description);
 
     if (!Reserve(&CommandCopy, CommandOrig.Size))
       return Result;
@@ -227,7 +226,7 @@ void Freetown::KillItem(
 
   // Release item structure (12 bytes)
   {
-    TMemorySegment ItemSeg =
+    TAddressSegment ItemSeg =
       FromAddrSize((TUint_2) Item, sizeof(TMenuItem));
 
     Release(&ItemSeg);
