@@ -171,7 +171,6 @@ TMenuItem Freetown::ToItem(
 {
   using
     me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::FromAsciiz,
     me_MemorySegment::Freetown::CopyMemTo,
     me_MemorySegment::Freetown::Release,
     me_StoredCall::Freetown::ToStoredCall;
@@ -185,18 +184,24 @@ TMenuItem Freetown::ToItem(
   TAddressSegment CommandCopy;
   TAddressSegment DescriptionCopy;
   {
-    TAddressSegment CommandOrig = FromAsciiz(Command);
-    TAddressSegment DescriptionOrig = FromAsciiz(Description);
+    TAddressSegment CommandOrig =
+      me_MemorySegment::FromAsciiz(Command);
+
+    TAddressSegment DescriptionOrig =
+      me_MemorySegment::FromAsciiz(Description);
 
     if (!Reserve(&CommandCopy, CommandOrig.Size))
       return Result;
+
     CopyMemTo(CommandCopy, CommandOrig);
 
     if (!Reserve(&DescriptionCopy, DescriptionOrig.Size))
     {
       Release(&CommandCopy);
+
       return Result;
     }
+
     CopyMemTo(DescriptionCopy, DescriptionOrig);
   }
 
