@@ -2,13 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-27
+  Last mod.: 2025-08-29
 */
 
 #include "me_Menu.h"
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h> // Freetown::FromAddrSize()
 #include <me_SerialTokenizer.h> // GetEntity()
 
 using namespace me_Menu;
@@ -48,10 +47,6 @@ TBool TMenu::GetCommand(
   TMenuItem * ItemSelected
 )
 {
-  using
-    me_SerialTokenizer::TSerialTokenizer,
-    me_MemorySegment::Freetown::FromAddrSize;
-
   /*
     Part one: get string
 
@@ -60,12 +55,12 @@ TBool TMenu::GetCommand(
   */
   TAddressSegment Entity;
 
-  TSerialTokenizer Tokenizer;
+  me_SerialTokenizer::TSerialTokenizer Tokenizer;
 
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
   TAddressSegment BuffSeg =
-    FromAddrSize((TUint_2) &Buff, BuffSize);
+    { .Addr = (TAddress) &Buff, .Size = BuffSize };
 
   Tokenizer.WaitEntity(&Entity, BuffSeg);
 

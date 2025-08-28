@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-08-29
 */
 
 #include "me_Menu.h"
@@ -39,7 +39,6 @@ TBool TMenu::AddItem(
 {
   using
     me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::FromAddrSize,
     me_MemorySegment::Freetown::CopyMemTo,
     me_MemorySegment::Freetown::Release;
 
@@ -52,7 +51,10 @@ TBool TMenu::AddItem(
     return false;
 
   // Set fields
-  CopyMemTo(ItemSeg, FromAddrSize((TUint_2) &OuterMenuItem, ItemStrucSize));
+  CopyMemTo(
+    ItemSeg,
+    { .Addr = (TAddress) &OuterMenuItem, .Size = ItemStrucSize }
+  );
 
   // Add address of that copy to menu list
   if (!List.Add(ItemSeg.Addr))
@@ -217,8 +219,7 @@ void Freetown::KillItem(
 )
 {
   using
-    me_MemorySegment::Freetown::Release,
-    me_MemorySegment::Freetown::FromAddrSize;
+    me_MemorySegment::Freetown::Release;
 
   // Release item strings
   Release(&Item->Command);
@@ -227,7 +228,7 @@ void Freetown::KillItem(
   // Release item structure (12 bytes)
   {
     TAddressSegment ItemSeg =
-      FromAddrSize((TUint_2) Item, sizeof(TMenuItem));
+      { .Addr = (TAddress) Item, .Size = sizeof(TMenuItem) };
 
     Release(&ItemSeg);
   }
