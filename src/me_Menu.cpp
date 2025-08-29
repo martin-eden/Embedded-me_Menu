@@ -8,9 +8,7 @@
 #include <me_Menu.h>
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h>
 #include <me_StoredCall.h>
-#include <me_List.h>
 #include <me_WorkmemTools.h>
 
 using namespace me_Menu;
@@ -179,10 +177,10 @@ TMenuItem Freetown::ToItem(
   TAddressSegment DescriptionCopy;
   {
     TAddressSegment CommandOrig =
-      me_MemorySegment::FromAsciiz(Command);
+      me_WorkmemTools::FromAsciiz(Command);
 
     TAddressSegment DescriptionOrig =
-      me_MemorySegment::FromAsciiz(Description);
+      me_WorkmemTools::FromAsciiz(Description);
 
     if (!Reserve(&CommandCopy, CommandOrig.Size))
       return Result;
