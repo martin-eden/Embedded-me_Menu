@@ -5,12 +5,13 @@
   Last mod.: 2025-08-29
 */
 
-#include "me_Menu.h"
+#include <me_Menu.h>
 
 #include <me_BaseTypes.h>
 #include <me_MemorySegment.h>
 #include <me_StoredCall.h>
 #include <me_List.h>
+#include <me_WorkmemTools.h>
 
 using namespace me_Menu;
 
@@ -37,21 +38,16 @@ TBool TMenu::AddItem(
   TMenuItem OuterMenuItem
 )
 {
-  using
-    me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::CopyMemTo,
-    me_MemorySegment::Freetown::Release;
-
-  const TUint_2 ItemStrucSize = sizeof(TMenuItem);
+  const TSize ItemStrucSize = sizeof(TMenuItem);
 
   TAddressSegment ItemSeg;
 
   // Allocate memory for copy of item structure
-  if (!Reserve(&ItemSeg, ItemStrucSize))
+  if (!me_WorkmemTools::Reserve(&ItemSeg, ItemStrucSize))
     return false;
 
   // Set fields
-  CopyMemTo(
+  me_WorkmemTools::CopyMemTo(
     ItemSeg,
     { .Addr = (TAddress) &OuterMenuItem, .Size = ItemStrucSize }
   );
@@ -59,7 +55,8 @@ TBool TMenu::AddItem(
   // Add address of that copy to menu list
   if (!List.Add(ItemSeg.Addr))
   {
-    Release(&ItemSeg);
+    me_WorkmemTools::Release(&ItemSeg);
+
     return false;
   }
 
@@ -70,8 +67,8 @@ TBool TMenu::AddItem(
   List handler: release item memory
 */
 void KillItem_Handler(
-  TUint_2 Data,
-  TUint_2 Instance __attribute__((unused))
+  TAddress Data,
+  TAddress Instance [[gnu::unused]]
 )
 {
   Freetown::KillItem((TMenuItem *) Data);
@@ -96,11 +93,8 @@ void TMenu::Run()
 {
   TMenuItem Item;
 
-  while (true)
+  while (!List.IsEmpty())
   {
-    if (List.IsEmpty())
-      break;
-
     if (GetCommand(&Item))
       Item.Execute();
   }
@@ -122,7 +116,7 @@ TBool TMenuItem::ItsMe(
   TAddressSegment Data
 )
 {
-  return me_MemorySegment::AreEqual(Command, Data);
+  return me_WorkmemTools::AreEqual(Command, Data);
 }
 
 /*
@@ -170,9 +164,9 @@ TMenuItem Freetown::ToItem(
 )
 {
   using
-    me_MemorySegment::Freetown::Reserve,
-    me_MemorySegment::Freetown::CopyMemTo,
-    me_MemorySegment::Freetown::Release,
+    me_WorkmemTools::Reserve,
+    me_WorkmemTools::CopyMemTo,
+    me_WorkmemTools::Release,
     me_StoredCall::Freetown::ToStoredCall;
 
   TMenuItem Result; // I hope it is zeroed, we can return it early
@@ -223,30 +217,20 @@ void Freetown::KillItem(
   TMenuItem * Item
 )
 {
-  using
-    me_MemorySegment::Freetown::Release;
+  TAddressSegment ItemSeg =
+    { .Addr = (TAddress) Item, .Size = sizeof(TMenuItem) };
 
   // Release item strings
-  Release(&Item->Command);
-  Release(&Item->Description);
+  me_WorkmemTools::Release(&Item->Command);
+  me_WorkmemTools::Release(&Item->Description);
 
   // Release item structure (12 bytes)
-  {
-    TAddressSegment ItemSeg =
-      { .Addr = (TAddress) Item, .Size = sizeof(TMenuItem) };
-
-    Release(&ItemSeg);
-  }
+  me_WorkmemTools::Release(&ItemSeg);
 }
 
 // ) Freetown
 
 /*
-  2024-05 1
-  2024-06 9
-  2024-07
-  2024-10-05
-  2024-10-17
-  2024-10-18
-  2024-12-15
+  2024 # # # # # # # # # # # # # # #
+  2025-08-29
 */
