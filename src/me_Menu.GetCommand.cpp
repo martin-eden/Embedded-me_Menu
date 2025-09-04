@@ -2,13 +2,15 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-29
+  Last mod.: 2025-09-04
 */
 
 #include <me_Menu.h>
 
 #include <me_BaseTypes.h>
-#include <me_SerialTokenizer.h> // GetEntity()
+#include <me_BaseInterfaces.h>
+#include <me_StreamTokenizer.h>
+#include <me_Console.h>
 
 using namespace me_Menu;
 
@@ -41,7 +43,7 @@ void OnListVisit(
 }
 
 /*
-  Consume one entity from serial and match it with our list of commands
+  Consume one entity from input stream and match it with our list of commands
 */
 TBool TMenu::GetCommand(
   TMenuItem * ItemSelected
@@ -49,25 +51,19 @@ TBool TMenu::GetCommand(
 {
   /*
     Part one: get string
-
-    String will be pointed by <Entity>.
-    That segment will be inside of our buffer segment.
   */
-  TAddressSegment Entity;
-
-  me_SerialTokenizer::TSerialTokenizer Tokenizer;
-
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
-  TAddressSegment BuffSeg =
-    { .Addr = (TAddress) &Buff, .Size = BuffSize };
+  TAddressSegment BuffSeg;
+  BuffSeg = { .Addr = (TAddress) &Buff, .Size = BuffSize };
 
-  Tokenizer.WaitEntity(&Entity, BuffSeg);
+  if (!me_StreamTokenizer::GetEntity(&BuffSeg, Console.GetInputStream()))
+    return false;
 
-  // Part two: search by this string
+  // Part two: search for this string
   TSearchAndCatch SearchState;
   {
-    SearchState.LookingFor = Entity;
+    SearchState.LookingFor = BuffSeg;
     SearchState.ItemFound = 0;
 
     List.Traverse(OnListVisit, (TUint_2) &SearchState);
@@ -89,4 +85,5 @@ TBool TMenu::GetCommand(
   2024-06-21 Spliced to standalone file
   2024-10-18
   2024-10-28
+  2025-09-04
 */
