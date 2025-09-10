@@ -2,15 +2,17 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-04
+  Last mod.: 2025-09-10
 */
 
 #include <me_Menu.h>
 
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
+
 #include <me_StreamTokenizer.h>
 #include <me_Console.h>
+#include <me_StreamsCollection.h>
 
 using namespace me_Menu;
 
@@ -55,10 +57,16 @@ TBool TMenu::GetCommand(
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
   TAddressSegment BuffSeg;
+  me_StreamsCollection::TWorkmemOutputStream BuffOutStream;
+
   BuffSeg = { .Addr = (TAddress) &Buff, .Size = BuffSize };
 
-  if (!me_StreamTokenizer::GetEntity(&BuffSeg, Console.GetInputStream()))
+  BuffOutStream.Init(BuffSeg);
+
+  if (!me_StreamTokenizer::GetEntity(&BuffOutStream, Console.GetInputStream()))
     return false;
+
+  BuffSeg = BuffOutStream.GetProcessedSegment();
 
   // Part two: search for this string
   TSearchAndCatch SearchState;
