@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-09-19
 */
 
 #pragma once
@@ -94,7 +94,7 @@ namespace me_Menu
       const TAsciiz Command,
       const TAsciiz Description,
       TMethod Handler,
-      TUint_2 Instance
+      TAddress Instance
     );
 
     // Allocate mem for structure

@@ -158,7 +158,7 @@ TMenuItem Freetown::ToItem(
   const TAsciiz Command,
   const TAsciiz Description,
   TMethod Handler,
-  TUint_2 Instance
+  TAddress Instance
 )
 {
   using
