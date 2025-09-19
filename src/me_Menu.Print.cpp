@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-27
+  Last mod.: 2025-09-19
 */
 
 #include <me_Menu.h>
@@ -26,7 +26,7 @@ void PrintListNode(
   Console.Write(Item->Command);
   if (Item->Description.Size > 0)
   {
-    Console.Write(" - ");
+    Console.Write("-");
     Console.Write(Item->Description);
   }
   Console.EndLine();
