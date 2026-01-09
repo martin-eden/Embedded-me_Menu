@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-18
+  Last mod.: 2026-01-10
 */
 
 #include <me_Menu.h>
@@ -215,7 +215,7 @@ void Freetown::KillItem(
   TMenuItem * Item
 )
 {
-  TAddressSegment ItemSeg = AsAddrSeg_M(*Item);
+  TAddressSegment ItemSeg = M_AsAddrSeg(*Item);
 
   // Release item strings
   me_WorkmemTools::Release(&Item->Command);
