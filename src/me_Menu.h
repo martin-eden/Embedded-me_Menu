@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-19
+  Last mod.: 2026-04-05
 */
 
 #pragma once
@@ -25,9 +25,7 @@ namespace me_Menu
     me_StoredCall::TStoredCall Handler;
 
     // Return true when <.Command> == <Data>
-    TBool ItsMe(
-      TAddressSegment Data
-    );
+    TBool ItsMe(TAddressSegment);
 
     // Run item handler
     void Execute();
@@ -40,7 +38,7 @@ namespace me_Menu
 
     Main method is Run(). It is loop of reading command from stdin,
     finding item by command name and executing it. Exit condition is
-    empty items list which may be done by "builtin" "exit" command.
+    empty items list which may be reached by executing "exit" command.
   */
   class TMenu
   {
@@ -51,9 +49,7 @@ namespace me_Menu
       ~TMenu();
 
       // Add copy of menu item to menu
-      TBool AddItem(
-        TMenuItem MenuItem
-      );
+      TBool AddItem(TMenuItem);
 
       // Add builtin commands: list, exit
       TBool AddBuiltinCommands();
@@ -69,9 +65,7 @@ namespace me_Menu
 
     protected:
       // Get entity from stdin and match it with our commands
-      TBool GetCommand(
-        TMenuItem * ItemSelected
-      );
+      TBool GetCommand(TMenuItem *);
 
       // Add "print menu" ("?") command
       TBool AddListCommand();
@@ -98,20 +92,13 @@ namespace me_Menu
     );
 
     // Allocate mem for structure
-    TBool SpawnItem(
-      TMenuItem * * Item
-    );
+    TBool SpawnItem(TMenuItem **);
 
     // Release derived memory and struc
-    void KillItem(
-      TMenuItem * Item
-    );
+    void KillItem(TMenuItem *);
   }
 }
 
 /*
-  2024-05 3
-  2024-06 4
-  2024-10-18
-  2024-12-15 [-] MenuItem.PrintWrappings
+  2024 # # # # # # # #
 */
