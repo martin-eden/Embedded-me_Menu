@@ -1,0 +1,27 @@
+( Verbosity or tersity?
+
+  Original [me_Menu] did not provide any output when executing command.
+
+  So if you add command "LedOn" and then type "LedOn" your code will be
+  executed but no output from [me_Menu] will be emitted.
+
+  That is optimal approach if nothing fails.
+
+  But something sometimes fails. And you can't even figure out is
+  your command recognized or not.
+
+  So now before executing any command we print line "( <command-name>".
+  And after execution we print line ")".
+
+  General communication principle is "tit for tat". If you sent us five
+  bytes we can reply with nearly five bytes. This naturally equalizes
+  communication efforts.
+
+  Note that List command "? " requires two bytes and returns arbitrary
+  long reply. That's good point for exploitation but hey it's convenient
+  for meat!
+
+  Machines may prefer command like "GetItemDescription <Index>".
+  Just start calling it from 1 till you get empty reply. Tit for tat.
+
+) 2026-04-05
