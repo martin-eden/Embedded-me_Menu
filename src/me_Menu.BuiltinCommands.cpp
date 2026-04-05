@@ -8,8 +8,44 @@
 #include <me_Menu.h>
 
 #include <me_BaseTypes.h>
+#include <me_Console.h>
+#include <me_WorkmemTools.h>
 
 using namespace me_Menu;
+
+/*
+  [Internal] List handler: print item
+*/
+static void PrintListNode(
+  TUint_2 Data,
+  TUint_2 HandlerData [[gnu::unused]]
+)
+{
+  using me_Menu::TMenuItem;
+  TMenuItem * Item = (TMenuItem *) Data;
+
+  Console.Write(Item->Command);
+  if (Item->Description.Size > 0)
+  {
+    Console.Write("-");
+    Console.Write(Item->Description);
+  }
+  Console.EndLine();
+}
+
+/*
+  Print list of commands
+
+  Conceptually it's internal function. Do not call it from your code,
+  call RunListCommand() instead.
+
+  But we can't make it "private" because we're getting Menu from
+  external pointer. So we can call only "public" functions there.
+*/
+void me_Menu::TMenu::Print()
+{
+  List.Traverse(PrintListNode);
+}
 
 /*
   List command caller
@@ -31,10 +67,26 @@ void ListCommand_Handler(
 */
 TBool TMenu::AddListCommand()
 {
-  using
-    Freetown::ToItem;
+  return
+    AddItem(
+      Freetown::ToItem(
+        "?",
+        "List commands",
+        ListCommand_Handler,
+        (TUint_2) this
+      )
+    );
+}
 
-  return AddItem(ToItem("?", "List commands", ListCommand_Handler, (TUint_2) this));
+/*
+  Execute "Print" command as if it was read as normal command
+
+  Usually we wish to print some intro/help before waiting commands.
+  This function is convenient shortcut for that.
+*/
+void TMenu::RunListCommand()
+{
+  RunCommand(me_WorkmemTools::FromAsciiz("?"));
 }
 
 /*
@@ -60,10 +112,15 @@ void ExitCommand_Handler(
 */
 TBool TMenu::AddExitCommand()
 {
-  using
-    Freetown::ToItem;
-
-  return AddItem(ToItem("^", "Exit", ExitCommand_Handler, (TUint_2) this));
+  return
+    AddItem(
+      Freetown::ToItem(
+        "^",
+        "Exit",
+        ExitCommand_Handler,
+        (TUint_2) this
+      )
+    );
 }
 
 /*

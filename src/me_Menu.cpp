@@ -10,6 +10,8 @@
 #include <me_BaseTypes.h>
 #include <me_WorkmemTools.h>
 #include <me_Console.h>
+#include <me_StreamTokenizer.h>
+#include <me_StreamsCollection.h>
 
 using namespace me_Menu;
 
@@ -73,6 +75,52 @@ void TMenu::Release()
 {
   List.Traverse(KillItem_Handler);
   List.Release();
+}
+
+/*
+  Execute given command
+
+  Returns FALSE if command not found.
+*/
+TBool TMenu::RunCommand(
+  TAddressSegment Command
+)
+{
+  TMenuItem Item;
+
+  if (!GetMenuItem(&Item, Command))
+    return false;
+
+  Item.Execute();
+
+  return true;
+}
+
+/*
+  Consume one entity from input stream and match it with our list of commands
+*/
+TBool TMenu::GetCommand(
+  TMenuItem * ItemSelected
+)
+{
+  const TUint_2 BuffSize = 32;
+  TUint_1 Buff[BuffSize];
+  TAddressSegment CmdSeg = M_AsAddrSeg(Buff);
+  me_StreamsCollection::TWorkmemOutputStream CmdStream;
+
+  CmdStream.Init(CmdSeg);
+
+  if (
+    !me_StreamTokenizer::GetEntity(
+      &CmdStream,
+      Console.GetInputStream()
+    )
+  )
+    return false;
+
+  CmdSeg = CmdStream.GetProcessedSegment();
+
+  return GetMenuItem(ItemSelected, CmdSeg);
 }
 
 /*

@@ -54,16 +54,25 @@ namespace me_Menu
       // Add builtin commands: list, exit
       TBool AddBuiltinCommands();
 
-      // Remove all items
-      void Release();
+      // Execute given command
+      TBool RunCommand(TAddressSegment);
 
-      // Print menu list
+      // [Internal] Print menu list
       void Print();
+
+      // Execute "Print()" as standard menu item
+      void RunListCommand();
 
       // Read command from stdin and execute corresponding item
       void Run();
 
+      // Remove all items
+      void Release();
+
     protected:
+      // Find menu item by command
+      TBool GetMenuItem(TMenuItem *, TAddressSegment);
+
       // Get entity from stdin and match it with our commands
       TBool GetCommand(TMenuItem *);
 
