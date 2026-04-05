@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-19
+  Last mod.: 2026-04-05
 */
 
 #include <me_Menu.h>
@@ -17,7 +17,7 @@ using namespace me_Menu;
 */
 void PrintListNode(
   TUint_2 Data,
-  TUint_2 HandlerData __attribute__((unused))
+  TUint_2 HandlerData [[gnu::unused]]
 )
 {
   using me_Menu::TMenuItem;
@@ -45,8 +45,5 @@ void me_Menu::TMenu::Print()
 }
 
 /*
-  2024-06-21 Spliced to standalone file
-  2024-10-05
-  2024-10-18
-  2024-10-27
+  2024 # # # #
 */
