@@ -2,13 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-10
+  Last mod.: 2026-04-05
 */
 
 #include <me_Menu.h>
 
 #include <me_BaseTypes.h>
-#include <me_BaseInterfaces.h>
 
 #include <me_StreamTokenizer.h>
 #include <me_Console.h>
@@ -51,15 +50,13 @@ TBool TMenu::GetCommand(
   TMenuItem * ItemSelected
 )
 {
-  /*
-    Part one: get string
-  */
   const TUint_2 BuffSize = 32;
   TUint_1 Buff[BuffSize];
-  TAddressSegment BuffSeg;
+  TAddressSegment BuffSeg = M_AsAddrSeg(Buff);
   me_StreamsCollection::TWorkmemOutputStream BuffOutStream;
+  TSearchAndCatch SearchState;
 
-  BuffSeg = { .Addr = (TAddress) &Buff, .Size = BuffSize };
+  // Part one: get string
 
   BuffOutStream.Init(BuffSeg);
 
@@ -69,29 +66,23 @@ TBool TMenu::GetCommand(
   BuffSeg = BuffOutStream.GetProcessedSegment();
 
   // Part two: search for this string
-  TSearchAndCatch SearchState;
-  {
-    SearchState.LookingFor = BuffSeg;
-    SearchState.ItemFound = 0;
 
-    List.Traverse(OnListVisit, (TUint_2) &SearchState);
-  }
+  SearchState.LookingFor = BuffSeg;
+  SearchState.ItemFound = 0;
+
+  List.Traverse(OnListVisit, (TUint_2) &SearchState);
 
   // Part three: fulfill contract
-  {
-    if (SearchState.ItemFound != 0)
-    {
-      *ItemSelected = *SearchState.ItemFound;
 
-      return true;
-    }
+  if (SearchState.ItemFound == 0)
     return false;
-  }
+
+  *ItemSelected = *SearchState.ItemFound;
+
+  return true;
 }
 
 /*
-  2024-06-21 Spliced to standalone file
-  2024-10-18
-  2024-10-28
+  2024 # # #
   2025-09-04
 */
