@@ -41,10 +41,7 @@ TBool TMenu::AddItem(
     return false;
 
   // Set fields
-  me_WorkmemTools::CopyMemTo(
-    ItemSeg,
-    { .Addr = (TAddress) &OuterMenuItem, .Size = ItemStrucSize }
-  );
+  me_WorkmemTools::CopyMemTo(ItemSeg, M_AsAddrSeg(OuterMenuItem));
 
   // Add address of that copy to menu list
   if (!List.Add(ItemSeg.Addr))
