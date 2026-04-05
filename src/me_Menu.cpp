@@ -117,9 +117,14 @@ TBool TMenuItem::ItsMe(
 void TMenuItem::Execute()
 {
   Console.Write("(");
-  Handler.Run();
-  Console.Write(")");
+  Console.Write(Command);
   Console.EndLine();
+  Console.Indent();
+
+  Handler.Run();
+
+  Console.Unindent();
+  Console.Print(")");
 };
 
 // ) Menu item

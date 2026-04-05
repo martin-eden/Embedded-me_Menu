@@ -37,11 +37,7 @@ void PrintListNode(
 */
 void me_Menu::TMenu::Print()
 {
-  Console.Print("--");
-  Console.Indent();
   List.Traverse(PrintListNode);
-  Console.Unindent();
-  Console.Print("==");
 }
 
 /*
