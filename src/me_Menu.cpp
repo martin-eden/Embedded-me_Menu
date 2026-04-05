@@ -9,6 +9,7 @@
 
 #include <me_BaseTypes.h>
 #include <me_WorkmemTools.h>
+#include <me_Console.h>
 
 using namespace me_Menu;
 
@@ -115,7 +116,10 @@ TBool TMenuItem::ItsMe(
 */
 void TMenuItem::Execute()
 {
+  Console.Write("(");
   Handler.Run();
+  Console.Write(")");
+  Console.EndLine();
 };
 
 // ) Menu item
