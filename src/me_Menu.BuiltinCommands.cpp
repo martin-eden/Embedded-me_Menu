@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-18
+  Last mod.: 2026-04-05
 */
 
 #include <me_Menu.h>
@@ -15,7 +15,7 @@ using namespace me_Menu;
   List command caller
 */
 void ListCommand_Handler(
-  TUint_2 Data __attribute__((unused)),
+  TUint_2 Data [[gnu::unused]],
   TUint_2 Instance
 )
 {
@@ -44,7 +44,7 @@ TBool TMenu::AddListCommand()
   in Menu.Run() loop.
 */
 void ExitCommand_Handler(
-  TUint_2 Data __attribute__((unused)),
+  TUint_2 Data [[gnu::unused]],
   TUint_2 Instance
 )
 {
