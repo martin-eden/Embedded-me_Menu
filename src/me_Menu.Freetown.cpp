@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2026-04-05
+  Last mod.: 2026-04-13
 */
 
 #include <me_Menu.h>
@@ -24,13 +24,12 @@ TMenuItem Freetown::ToItem(
   me_StoredCall::TStoredCall Handler
 )
 {
-  TMenuItem Result;
-
-  Result.Command = Command;
-  Result.Description = Description;
-  Result.Handler = Handler;
-
-  return Result;
+  return
+    {
+      .Command = Command,
+      .Description = Description,
+      .Handler = Handler,
+    };
 }
 
 /*
@@ -41,7 +40,7 @@ TMenuItem Freetown::ToItem(
 TMenuItem Freetown::ToItem(
   const TAsciiz Command,
   const TAsciiz Description,
-  TMethod Handler,
+  TCallback Method,
   TAddress Instance
 )
 {
@@ -86,7 +85,7 @@ TMenuItem Freetown::ToItem(
     ToItem(
       CommandCopy,
       DescriptionCopy,
-      ToStoredCall(Handler, Instance)
+      ToStoredCall(Method, Instance)
     );
 }
 

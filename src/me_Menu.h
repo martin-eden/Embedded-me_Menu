@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2026-04-05
+  Last mod.: 2026-04-13
 */
 
 #pragma once
@@ -96,7 +96,7 @@ namespace me_Menu
     TMenuItem ToItem(
       const TAsciiz Command,
       const TAsciiz Description,
-      TMethod Handler,
+      TCallback Method,
       TAddress Instance
     );
 
