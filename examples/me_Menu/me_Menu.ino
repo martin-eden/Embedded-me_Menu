@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-19
+  Last mod.: 2026-04-13
 */
 
 #include <me_Menu.h>
@@ -87,21 +87,8 @@ void TBuiltinLed::SetHigh()
 
 /*
   Wrappers for class methods
-
-  Because I did not find a way to get pointer to member function.
-
-  We are using universal
-
-    handler data instance
-    ~~~~~~~ ~~~~ ~~~~~~~~
-      ui2    ui2   ui2
-
-  approach to call function with data and pointer to state.
-
-  In this case we have nothing for "data". Menu does not use it.
 */
 void PrintState_Handler(
-  TAddress Data [[gnu::unused]],
   TAddress InstanceAddr
 )
 {
@@ -110,7 +97,6 @@ void PrintState_Handler(
 }
 
 void SetLow_Handler(
-  TAddress Data [[gnu::unused]],
   TAddress InstanceAddr
 )
 {
@@ -119,7 +105,6 @@ void SetLow_Handler(
 }
 
 void SetHigh_Handler(
-  TAddress Data [[gnu::unused]],
   TAddress InstanceAddr
 )
 {
